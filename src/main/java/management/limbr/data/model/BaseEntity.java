@@ -21,11 +21,12 @@ package management.limbr.data.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Base class to be used by model entities.
  */
-public class BaseEntity {
+public abstract class BaseEntity {
     /**
      * Gets a textual representation of a POJO.
      *
@@ -38,18 +39,24 @@ public class BaseEntity {
         Class clazz = getClass();
 
         builder.append("{class:\"");
-        builder.append(clazz.getCanonicalName());
+        builder.append(clazz.getTypeName());
         builder.append("\",");
 
-        for (Method method : clazz.getMethods()) {
+        // we need to sort the methods so they come out in a predictable order
+        Method[] methods = clazz.getMethods();
+        Arrays.sort(methods,
+                (Method a, Method b) -> methodNameToFieldName(a.getName()).compareTo(methodNameToFieldName(b.getName())));
+
+        for (Method method : methods) {
             String methodName = method.getName();
-            if (methodName.startsWith("get") || methodName.startsWith("is") || methodName.startsWith("has")) {
+            if ((methodName.startsWith("get")
+                    || methodName.startsWith("is")
+                    || methodName.startsWith("has"))
+                    && !(methodName.equals("hashCode") || methodName.equals("getClass"))) {
+
                 try {
                     // get the value FIRST so we don't append other things if we can't get it
                     String value = safeValue(method.invoke(this));
-                    if (value == null) {
-                        value = "null";
-                    }
                     builder.append(methodNameToFieldName(methodName));
                     builder.append(':');
                     builder.append(value);
@@ -70,6 +77,10 @@ public class BaseEntity {
     }
 
     private String safeValue(Object object) {
+        if (object == null) {
+            return "null";
+        }
+
         if (object instanceof String) {
             return "\"" + object.toString().replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\"";
         }
