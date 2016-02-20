@@ -78,4 +78,3 @@ buildNumber.properties
 .mvn/timing.properties
 
 ### Exceptions ###
-!.mvn/wrapper/maven-wrapper.jar
