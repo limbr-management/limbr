@@ -21,6 +21,7 @@ package management.limbr;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -66,27 +67,56 @@ public class LimbrApplication {
         @Autowired
         TestServiceOne service;
 
-        UserRepository repository;
+        private final UserEditor editor;
+        private final UserRepository repository;
 
         @Autowired
-        public VaadinUI(UserRepository repository) {
+        public VaadinUI(UserRepository repository, UserEditor editor) {
             this.repository = repository;
+            this.editor = editor;
         }
 
         @Override
         protected void init(VaadinRequest request) {
-            VerticalLayout verticalLayout = new VerticalLayout();
-            verticalLayout.addComponent(new Label(service.sayHi()));
+            VerticalLayout mainLayout = new VerticalLayout();
+            mainLayout.addComponent(new Label(service.sayHi()));
 
             Grid grid = new Grid();
             TextField filter = new TextField();
             filter.setInputPrompt("Filter by username");
             filter.addTextChangeListener(e -> listUsers(grid, e.getText()));
+            Button addNewButton = new Button("New user", FontAwesome.PLUS);
+            HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
+            actions.setSpacing(true);
+            grid.removeAllColumns();
+            grid.addColumn("username");
+            grid.addColumn("displayName");
+            grid.addColumn("emailAddress");
 
-            verticalLayout.addComponent(filter);
-            verticalLayout.addComponent(grid);
+            grid.addSelectionListener(e -> {
+                if (e.getSelected().isEmpty()) {
+                    editor.setVisible(false);
+                } else {
+                    editor.editUser((User)e.getSelected().iterator().next());
+                }
+            });
 
-            setContent(verticalLayout);
+            addNewButton.addClickListener(e -> editor.editUser(new User("", "", "", "")));
+
+            editor.setChangeHandler(() -> {
+                editor.setVisible(false);
+                listUsers(grid, filter.getValue());
+            });
+
+            mainLayout.addComponent(actions);
+            mainLayout.addComponent(grid);
+            mainLayout.addComponent(editor);
+            mainLayout.setSpacing(true);
+            mainLayout.setMargin(true);
+
+            setContent(mainLayout);
+
+            listUsers(grid, null);
         }
 
         private void listUsers(Grid grid, String filter) {
