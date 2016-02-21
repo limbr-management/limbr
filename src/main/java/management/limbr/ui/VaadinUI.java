@@ -25,7 +25,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-import management.limbr.LimbrApplication;
 import management.limbr.UserEditor;
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
@@ -35,9 +34,6 @@ import org.springframework.util.StringUtils;
 @Theme("valo")
 @SpringUI(path = "")
 public class VaadinUI extends UI {
-    @Autowired
-    LimbrApplication.TestServiceOne service;
-
     private final UserEditor editor;
     private final UserRepository repository;
 
@@ -50,7 +46,6 @@ public class VaadinUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         VerticalLayout mainLayout = new VerticalLayout();
-        mainLayout.addComponent(new Label(service.sayHi()));
 
         Grid grid = new Grid();
         TextField filter = new TextField();

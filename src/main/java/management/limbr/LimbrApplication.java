@@ -27,7 +27,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
 
 @SpringBootApplication
 public class LimbrApplication {
@@ -45,12 +44,4 @@ public class LimbrApplication {
             repository.save(new User("bob", "Bob Builder", "deadbeef", "bob@limbr.management"));
         };
     }
-
-	@Service
-    public static class TestServiceOne {
-        public String sayHi() {
-            return "Hello, Spring Initializer!";
-        }
-    }
-
 }
