@@ -5,4 +5,4 @@ before_install: "git clone -b travis-ci-settings `git config --get remote.origin
 script:
     - "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
     - "mvn test -B"
-    - "mvn --settings ../../travis/settings.xml sonar:sonar"
+    - "mvn --settings travis/settings.xml sonar:sonar"
