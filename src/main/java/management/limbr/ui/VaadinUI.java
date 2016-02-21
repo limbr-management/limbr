@@ -27,7 +27,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import management.limbr.ui.view.UsersView;
+import management.limbr.ui.users.UsersViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Theme("valo")
@@ -44,6 +44,7 @@ public class VaadinUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+
         final VerticalLayout root = new VerticalLayout();
         root.setSizeFull();
         root.setMargin(true);
@@ -57,7 +58,7 @@ public class VaadinUI extends UI {
         CssLayout navBar = new CssLayout();
         navBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         navBar.addComponent(logo);
-        navBar.addComponent(createNavButton("Users", UsersView.VIEW_NAME));
+        navBar.addComponent(createNavButton("Users", UsersViewImpl.VIEW_NAME));
         root.addComponent(navBar);
 
         final Panel viewContainer = new Panel();
@@ -67,6 +68,7 @@ public class VaadinUI extends UI {
 
         Navigator navigator = new Navigator(this, viewContainer);
         navigator.addProvider(viewProvider);
+
     }
 
     private Button createNavButton(String caption, String view) {

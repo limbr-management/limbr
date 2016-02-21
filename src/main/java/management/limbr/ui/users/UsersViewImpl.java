@@ -17,37 +17,38 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.view;
+package management.limbr.ui.users;
 
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import management.limbr.UserEditor;
-import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 
-@SpringView(name = UsersView.VIEW_NAME)
-public class UsersView extends VerticalLayout implements View {
+@UIScope
+@SpringView(name = UsersViewImpl.VIEW_NAME)
+public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     public static final String VIEW_NAME = "users";
 
     private final UserEditor editor;
-    private final UserRepository repository;
 
     @Autowired
-    public UsersView(UserEditor editor, UserRepository repository) {
+    private transient Collection<UsersViewListener> listeners;
+
+    @Autowired
+    public UsersViewImpl(UserEditor editor) {
         this.editor = editor;
-        this.repository = repository;
     }
 
     @PostConstruct
-    void init() {
+    private void init() {
         Grid grid = new Grid();
         TextField filter = new TextField();
         filter.setInputPrompt("Filter by username");
@@ -79,16 +80,13 @@ public class UsersView extends VerticalLayout implements View {
         addComponent(grid);
         addComponent(editor);
 
+        listeners.forEach(listener -> listener.viewInitialized(this));
+
         listUsers(grid, null);
     }
 
     private void listUsers(Grid grid, String filter) {
-        if (StringUtils.isEmpty(filter)) {
-            grid.setContainerDataSource(new BeanItemContainer<>(User.class, repository.findAll()));
-        } else {
-            grid.setContainerDataSource(new BeanItemContainer<>(User.class,
-                    repository.findByUsernameStartsWithIgnoreCase(filter)));
-        }
+        listeners.forEach(listener -> grid.setContainerDataSource(listener.listUsers(filter)));
     }
 
     @Override
