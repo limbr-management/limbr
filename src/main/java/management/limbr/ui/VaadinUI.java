@@ -20,77 +20,60 @@
 package management.limbr.ui;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
-import management.limbr.UserEditor;
-import management.limbr.data.UserRepository;
-import management.limbr.data.model.User;
+import com.vaadin.ui.themes.ValoTheme;
+import management.limbr.ui.view.UsersView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 @Theme("valo")
 @SpringUI(path = "")
 public class VaadinUI extends UI {
-    private final UserEditor editor;
-    private final UserRepository repository;
-
     @Autowired
-    public VaadinUI(UserRepository repository, UserEditor editor) {
-        this.repository = repository;
-        this.editor = editor;
+    SpringViewProvider viewProvider;
+
+    // TODO: We should have either a ViewAccessControl or a ViewInstanceAccessControl for security
+    // (just make a bean -- Spring will give it to the SpringViewProvider)
+
+    public VaadinUI() {
     }
 
     @Override
     protected void init(VaadinRequest request) {
-        VerticalLayout mainLayout = new VerticalLayout();
+        final VerticalLayout root = new VerticalLayout();
+        root.setSizeFull();
+        root.setMargin(true);
+        root.setSpacing(true);
+        setContent(root);
 
-        Grid grid = new Grid();
-        TextField filter = new TextField();
-        filter.setInputPrompt("Filter by username");
-        filter.addTextChangeListener(e -> listUsers(grid, e.getText()));
-        Button addNewButton = new Button("New user", FontAwesome.PLUS);
-        HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
-        actions.setSpacing(true);
-        grid.removeAllColumns();
-        grid.addColumn("username");
-        grid.addColumn("displayName");
-        grid.addColumn("emailAddress");
+        Image logo = new Image(null, new ExternalResource("images/logo1.png"));
+        logo.setHeight(1.2f, Unit.EM);
+        logo.setWidthUndefined();
 
-        grid.addSelectionListener(e -> {
-            if (e.getSelected().isEmpty()) {
-                editor.setVisible(false);
-            } else {
-                editor.editUser((User)e.getSelected().iterator().next());
-            }
-        });
+        CssLayout navBar = new CssLayout();
+        navBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+        navBar.addComponent(logo);
+        navBar.addComponent(createNavButton("Users", UsersView.VIEW_NAME));
+        root.addComponent(navBar);
 
-        addNewButton.addClickListener(e -> editor.editUser(new User("", "", "", "")));
+        final Panel viewContainer = new Panel();
+        viewContainer.setSizeFull();
+        root.addComponent(viewContainer);
+        root.setExpandRatio(viewContainer, 1.0f);
 
-        editor.setChangeHandler(() -> {
-            editor.setVisible(false);
-            listUsers(grid, filter.getValue());
-        });
-
-        mainLayout.addComponent(actions);
-        mainLayout.addComponent(grid);
-        mainLayout.addComponent(editor);
-        mainLayout.setSpacing(true);
-        mainLayout.setMargin(true);
-
-        setContent(mainLayout);
-
-        listUsers(grid, null);
+        Navigator navigator = new Navigator(this, viewContainer);
+        navigator.addProvider(viewProvider);
     }
 
-    private void listUsers(Grid grid, String filter) {
-        if (StringUtils.isEmpty(filter)) {
-            grid.setContainerDataSource(new BeanItemContainer<>(User.class, repository.findAll()));
-        } else {
-            grid.setContainerDataSource(new BeanItemContainer<>(User.class,
-                    repository.findByUsernameStartsWithIgnoreCase(filter)));
-        }
+    private Button createNavButton(String caption, String view) {
+        Button button = new Button(caption);
+        button.addStyleName(ValoTheme.BUTTON_SMALL);
+        button.addClickListener(e -> getUI().getNavigator().navigateTo(view));
+        return button;
     }
+
 }
