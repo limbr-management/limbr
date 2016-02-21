@@ -4,4 +4,4 @@ jdk:
 before_install: "git clone -b travis-ci-settings `git config --get remote.origin.url` travis"
 script:
     - "mvn test -B"
-    - "mvn -X -e --settings travis/settings.xml sonar:sonar -Dsonar.verbose=true"
+    - "mvn -X -e --settings travis/settings.xml sonar:sonar -Dsonar.verbose=true -Dsonar.branch=`git name-rev --name-only HEAD` -DignoreThis=$SONAR_LOGIN"
