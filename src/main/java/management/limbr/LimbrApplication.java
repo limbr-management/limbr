@@ -19,23 +19,15 @@
 
 package management.limbr;
 
-import com.vaadin.annotations.Theme;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.*;
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @SpringBootApplication
 public class LimbrApplication {
@@ -61,71 +53,4 @@ public class LimbrApplication {
         }
     }
 
-    @Theme("valo")
-    @SpringUI(path = "")
-    public static class VaadinUI extends UI {
-        @Autowired
-        TestServiceOne service;
-
-        private final UserEditor editor;
-        private final UserRepository repository;
-
-        @Autowired
-        public VaadinUI(UserRepository repository, UserEditor editor) {
-            this.repository = repository;
-            this.editor = editor;
-        }
-
-        @Override
-        protected void init(VaadinRequest request) {
-            VerticalLayout mainLayout = new VerticalLayout();
-            mainLayout.addComponent(new Label(service.sayHi()));
-
-            Grid grid = new Grid();
-            TextField filter = new TextField();
-            filter.setInputPrompt("Filter by username");
-            filter.addTextChangeListener(e -> listUsers(grid, e.getText()));
-            Button addNewButton = new Button("New user", FontAwesome.PLUS);
-            HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
-            actions.setSpacing(true);
-            grid.removeAllColumns();
-            grid.addColumn("username");
-            grid.addColumn("displayName");
-            grid.addColumn("emailAddress");
-
-            grid.addSelectionListener(e -> {
-                if (e.getSelected().isEmpty()) {
-                    editor.setVisible(false);
-                } else {
-                    editor.editUser((User)e.getSelected().iterator().next());
-                }
-            });
-
-            addNewButton.addClickListener(e -> editor.editUser(new User("", "", "", "")));
-
-            editor.setChangeHandler(() -> {
-                editor.setVisible(false);
-                listUsers(grid, filter.getValue());
-            });
-
-            mainLayout.addComponent(actions);
-            mainLayout.addComponent(grid);
-            mainLayout.addComponent(editor);
-            mainLayout.setSpacing(true);
-            mainLayout.setMargin(true);
-
-            setContent(mainLayout);
-
-            listUsers(grid, null);
-        }
-
-        private void listUsers(Grid grid, String filter) {
-            if (StringUtils.isEmpty(filter)) {
-                grid.setContainerDataSource(new BeanItemContainer<>(User.class, repository.findAll()));
-            } else {
-                grid.setContainerDataSource(new BeanItemContainer<>(User.class,
-                        repository.findByUsernameStartsWithIgnoreCase(filter)));
-            }
-        }
-    }
 }
