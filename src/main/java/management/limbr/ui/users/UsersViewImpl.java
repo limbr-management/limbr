@@ -25,8 +25,9 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
-import management.limbr.UserEditor;
 import management.limbr.data.model.User;
+import management.limbr.ui.usereditor.UserEditorPresenter;
+import management.limbr.ui.usereditor.UserEditorViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -37,15 +38,14 @@ import java.util.Collection;
 public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     public static final String VIEW_NAME = "users";
 
-    private final UserEditor editor;
+    @Autowired
+    private UserEditorViewImpl editorView;
+
+    @Autowired
+    private UserEditorPresenter editorPresenter;
 
     @Autowired
     private transient Collection<UsersViewListener> listeners;
-
-    @Autowired
-    public UsersViewImpl(UserEditor editor) {
-        this.editor = editor;
-    }
 
     @PostConstruct
     private void init() {
@@ -61,24 +61,25 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
         grid.addColumn("displayName");
         grid.addColumn("emailAddress");
 
+        // TODO: This next part violates MVP. Need to think about how to fix that.
         grid.addSelectionListener(e -> {
             if (e.getSelected().isEmpty()) {
-                editor.setVisible(false);
+                editorPresenter.hide();
             } else {
-                editor.editUser((User)e.getSelected().iterator().next());
+                editorPresenter.editUser((User)e.getSelected().iterator().next());
             }
         });
 
-        addNewButton.addClickListener(e -> editor.editUser(new User("", "", "", "")));
+        addNewButton.addClickListener(e -> editorPresenter.editUser(new User("", "", "", "")));
 
-        editor.setChangeHandler(() -> {
-            editor.setVisible(false);
+        editorPresenter.setUserChangeHandler(() -> {
+            editorPresenter.hide();
             listUsers(grid, filter.getValue());
         });
 
         addComponent(actions);
         addComponent(grid);
-        addComponent(editor);
+        addComponent(editorView);
 
         listeners.forEach(listener -> listener.viewInitialized(this));
 

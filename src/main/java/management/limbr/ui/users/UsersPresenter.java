@@ -26,8 +26,10 @@ import management.limbr.ui.Presenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
+
 @Presenter
-public class UsersPresenter implements UsersView.UsersViewListener {
+public class UsersPresenter implements UsersView.UsersViewListener, Serializable {
 
     private final UserRepository repository;
 
