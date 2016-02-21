@@ -23,21 +23,28 @@ import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
 import management.limbr.ui.Presenter;
+import management.limbr.ui.usereditor.UserEditorPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Set;
 
 @Presenter
-public class UsersPresenter implements UsersView.UsersViewListener, Serializable {
+public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPresenter.UserChangeHandler, Serializable {
 
-    private final UserRepository repository;
+    @Autowired
+    private UserRepository repository;
+
+    @Autowired
+    private UserEditorPresenter editorPresenter;
 
     private UsersView view;
 
-    @Autowired
-    public UsersPresenter(UserRepository repository) {
-        this.repository = repository;
+    @PostConstruct
+    public void init() {
+        editorPresenter.setUserChangeHandler(this);
     }
 
     @Override
@@ -53,5 +60,25 @@ public class UsersPresenter implements UsersView.UsersViewListener, Serializable
             return new BeanItemContainer<>(User.class,
                     repository.findByUsernameStartsWithIgnoreCase(filter));
         }
+    }
+
+    @Override
+    public void usersSelected(Set<Object> users) {
+        if (users.isEmpty()) {
+            editorPresenter.hide();
+        } else {
+            editorPresenter.editUser((User)users.iterator().next());
+        }
+    }
+
+    @Override
+    public void addNewClicked() {
+        editorPresenter.editUser(new User("", "", "", ""));
+    }
+
+    @Override
+    public void onUserChanged() {
+        editorPresenter.hide();
+        view.refresh();
     }
 }

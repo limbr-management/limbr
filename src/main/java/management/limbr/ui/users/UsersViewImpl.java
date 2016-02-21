@@ -25,8 +25,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
-import management.limbr.data.model.User;
-import management.limbr.ui.usereditor.UserEditorPresenter;
 import management.limbr.ui.usereditor.UserEditorViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,17 +40,16 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     private UserEditorViewImpl editorView;
 
     @Autowired
-    private UserEditorPresenter editorPresenter;
-
-    @Autowired
     private transient Collection<UsersViewListener> listeners;
+
+    private Grid grid;
 
     @PostConstruct
     private void init() {
-        Grid grid = new Grid();
+        grid = new Grid();
         TextField filter = new TextField();
         filter.setInputPrompt("Filter by username");
-        filter.addTextChangeListener(e -> listUsers(grid, e.getText()));
+        filter.addTextChangeListener(e -> listUsers(e.getText()));
         Button addNewButton = new Button("New user", FontAwesome.PLUS);
         HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
         actions.setSpacing(true);
@@ -61,21 +58,9 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
         grid.addColumn("displayName");
         grid.addColumn("emailAddress");
 
-        // TODO: This next part violates MVP. Need to think about how to fix that.
-        grid.addSelectionListener(e -> {
-            if (e.getSelected().isEmpty()) {
-                editorPresenter.hide();
-            } else {
-                editorPresenter.editUser((User)e.getSelected().iterator().next());
-            }
-        });
+        grid.addSelectionListener(e -> listeners.forEach(listener -> listener.usersSelected(e.getSelected())));
 
-        addNewButton.addClickListener(e -> editorPresenter.editUser(new User("", "", "", "")));
-
-        editorPresenter.setUserChangeHandler(() -> {
-            editorPresenter.hide();
-            listUsers(grid, filter.getValue());
-        });
+        addNewButton.addClickListener(e -> listeners.forEach(UsersViewListener::addNewClicked));
 
         addComponent(actions);
         addComponent(grid);
@@ -83,10 +68,15 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
 
         listeners.forEach(listener -> listener.viewInitialized(this));
 
-        listUsers(grid, null);
+        refresh();
     }
 
-    private void listUsers(Grid grid, String filter) {
+    @Override
+    public void refresh() {
+        listUsers(null);
+    }
+
+    private void listUsers(String filter) {
         listeners.forEach(listener -> grid.setContainerDataSource(listener.listUsers(filter)));
     }
 

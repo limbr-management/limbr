@@ -22,9 +22,15 @@ package management.limbr.ui.users;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.model.User;
 
+import java.util.Set;
+
 public interface UsersView {
+    void refresh();
+
     interface UsersViewListener {
         BeanItemContainer<User> listUsers(String filter);
         void viewInitialized(UsersView view);
+        void usersSelected(Set<Object> users);
+        void addNewClicked();
     }
 }
