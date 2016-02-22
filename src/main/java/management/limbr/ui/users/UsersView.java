@@ -19,6 +19,7 @@
 
 package management.limbr.ui.users;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.model.User;
 
@@ -30,7 +31,7 @@ public interface UsersView {
     interface UsersViewListener {
         BeanItemContainer<User> listUsers(String filter);
         void viewInitialized(UsersView view);
-        void usersSelected(Set<Object> users);
+        void editUser(Item user);
         void addNewClicked();
     }
 }

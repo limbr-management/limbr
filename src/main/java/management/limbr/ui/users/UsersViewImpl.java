@@ -59,13 +59,16 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
         grid.addColumn("displayName");
         grid.addColumn("emailAddress");
 
-        grid.addSelectionListener(e -> listeners.forEach(listener -> listener.usersSelected(e.getSelected())));
+        grid.addItemClickListener(e -> {
+            if (e.isDoubleClick()) {
+                listeners.forEach(listener -> listener.editUser(e.getItem()));
+            }
+        });
 
         addNewButton.addClickListener(e -> listeners.forEach(UsersViewListener::addNewClicked));
 
         addComponent(actions);
         addComponent(grid);
-        addComponent(editorView);
 
         listeners.forEach(listener -> listener.viewInitialized(this));
 

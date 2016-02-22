@@ -35,7 +35,7 @@ import java.util.Collection;
 @SpringComponent
 @UIScope
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here
-public class UserEditorViewImpl extends VerticalLayout implements UserEditorView {
+public class UserEditorViewImpl extends Window implements UserEditorView {
 
     @Autowired
     private transient Collection<UserEditorViewListener> listeners;
@@ -51,10 +51,14 @@ public class UserEditorViewImpl extends VerticalLayout implements UserEditorView
 
     @PostConstruct
     public void init() {
+        VerticalLayout content = new VerticalLayout();
         CssLayout actions = new CssLayout(save, cancel, delete);
-        addComponents(userName, displayName, password, emailAddress, actions);
-
-        setVisible(false);
+        content.addComponents(userName, displayName, password, emailAddress, actions);
+        content.setMargin(true);
+        setContent(content);
+        setClosable(true);
+        setResizable(false);
+        setModal(true);
 
         listeners.forEach(listener -> listener.viewInitialized(this));
 
@@ -110,14 +114,15 @@ public class UserEditorViewImpl extends VerticalLayout implements UserEditorView
 
     @Override
     public void show() {
-        setVisible(true);
+        center();
+        UI.getCurrent().addWindow(this);
         save.focus();
         userName.selectAll();
     }
 
     @Override
     public void hide() {
-        setVisible(false);
+        close();
     }
 
 }

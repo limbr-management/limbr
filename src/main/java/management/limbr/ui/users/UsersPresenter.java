@@ -19,6 +19,8 @@
 
 package management.limbr.ui.users;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
@@ -63,11 +65,12 @@ public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPr
     }
 
     @Override
-    public void usersSelected(Set<Object> users) {
-        if (users.isEmpty()) {
+    @SuppressWarnings("unchecked")
+    public void editUser(Item user) {
+        if (user == null || !(user instanceof BeanItem)) {
             editorPresenter.hide();
         } else {
-            editorPresenter.editUser((User)users.iterator().next());
+            editorPresenter.editUser(((BeanItem<User>)user).getBean());
         }
     }
 

@@ -29,6 +29,7 @@ import java.io.Serializable;
 
 @Presenter
 public class UserEditorPresenter implements UserEditorView.UserEditorViewListener, Serializable {
+    public static final String PASSWORD_PLACEHOLDER = "$notPass$12345678";
     @Autowired
     private transient UserRepository repository;
 
@@ -56,9 +57,9 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
         BeanFieldGroup.bindFieldsUnbuffered(user, this);
 
         view.setUsername(u.getUsername());
-        view.setPassword(u.getPasswordHash());
+        view.setPassword(PASSWORD_PLACEHOLDER);
         view.setDisplayName(u.getDisplayName());
-        view.setEmailAddress(u.getPasswordHash());
+        view.setEmailAddress(u.getEmailAddress());
 
         view.show();
     }
@@ -66,7 +67,10 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
     @Override
     public void save() {
         user.setUsername(view.getUsername());
-        user.setPasswordHash(view.getPassword());
+        String password = view.getPassword();
+        if (!PASSWORD_PLACEHOLDER.equals(password)) {
+            user.setPasswordHash(password); // TODO: do a salted hash, not the actual password
+        }
         user.setDisplayName(view.getDisplayName());
         user.setEmailAddress(view.getEmailAddress());
 
@@ -75,20 +79,26 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
         if (userChangeHandler != null) {
             userChangeHandler.onUserChanged();
         }
+
+        view.hide();
     }
 
     @Override
     public void delete() {
+        // TODO: ask if they're sure!
+
         repository.delete(user);
 
         if (userChangeHandler != null) {
             userChangeHandler.onUserChanged();
         }
+
+        view.hide();
     }
 
     @Override
     public void cancel() {
-        editUser(user);
+        view.hide();
     }
 
     @Override

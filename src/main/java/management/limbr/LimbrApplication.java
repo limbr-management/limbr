@@ -35,8 +35,8 @@ public class LimbrApplication {
 
     public static void main(String[] args) {
         LOG.info("Limbr is starting up.");
-        SpringApplication.run(LimbrApplication.class, args).close();
-        LOG.info("Limbr has stopped.");
+        SpringApplication.run(LimbrApplication.class, args);
+        LOG.info("Limbr is running.");
     }
 
     @Bean
