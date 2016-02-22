@@ -53,6 +53,7 @@
         <spring.version>4.2.4.RELEASE</spring.version>
         <tomcat.version>8.0.30</tomcat.version>
         <testng.version>6.9.6</testng.version>
+        <commons-codec.version>1.10</commons-codec.version>
 	</properties>
 
 	<dependencies>
@@ -112,6 +113,10 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
         <!-- Test Dependencies -->
 		<dependency>
@@ -205,6 +210,11 @@
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
             </dependency>
 
             <!-- Test Dependencies -->

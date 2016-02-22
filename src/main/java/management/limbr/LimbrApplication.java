@@ -42,7 +42,7 @@ public class LimbrApplication {
     @Bean
     public CommandLineRunner loadData(UserRepository repository) {
         return args -> {
-            repository.save(new User("admin", "Admin", "deadbeef", "admin@limbr.management"));
+            repository.save(new User("admin", "Admin", "e9bb0f231e2f35658dda443345a46f5d", "admin@limbr.management"));
             repository.save(new User("bob", "Bob Builder", "deadbeef", "bob@limbr.management"));
         };
     }

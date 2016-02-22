@@ -22,6 +22,7 @@ package management.limbr.ui.usereditor;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
+import management.limbr.data.model.util.UserUtil;
 import management.limbr.ui.Presenter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,8 +31,12 @@ import java.io.Serializable;
 @Presenter
 public class UserEditorPresenter implements UserEditorView.UserEditorViewListener, Serializable {
     public static final String PASSWORD_PLACEHOLDER = "$notPass$12345678";
+
     @Autowired
     private transient UserRepository repository;
+
+    @Autowired
+    private transient UserUtil userUtil;
 
     private User user;
 
@@ -66,10 +71,11 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
 
     @Override
     public void save() {
-        user.setUsername(view.getUsername());
+        String username = view.getUsername();
+        user.setUsername(username);
         String password = view.getPassword();
         if (!PASSWORD_PLACEHOLDER.equals(password)) {
-            user.setPasswordHash(password); // TODO: do a salted hash, not the actual password
+            user.setPasswordHash(userUtil.generatePasswordHash(username, password));
         }
         user.setDisplayName(view.getDisplayName());
         user.setEmailAddress(view.getEmailAddress());
