@@ -23,8 +23,6 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.model.User;
 
-import java.util.Set;
-
 public interface UsersView {
     void refresh();
 

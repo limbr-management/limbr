@@ -30,6 +30,7 @@ import java.io.Serializable;
 
 @Presenter
 public class UserEditorPresenter implements UserEditorView.UserEditorViewListener, Serializable {
+    @SuppressWarnings("squid:S2068") // it's not a hard-coded password
     public static final String PASSWORD_PLACEHOLDER = "$notPass$12345678";
 
     @Autowired

@@ -31,7 +31,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.Set;
 
 @Presenter
 public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPresenter.UserChangeHandler, Serializable {
