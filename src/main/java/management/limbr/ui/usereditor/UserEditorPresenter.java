@@ -30,11 +30,13 @@ import java.io.Serializable;
 @Presenter
 public class UserEditorPresenter implements UserEditorView.UserEditorViewListener, Serializable {
     @Autowired
-    private UserRepository repository;
+    private transient UserRepository repository;
 
     private User user;
 
-    private UserEditorView view;
+    private transient UserEditorView view;
+
+    private transient UserChangeHandler userChangeHandler;
 
     public void hide() {
         view.hide();
@@ -94,11 +96,10 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
         this.view = view;
     }
 
+    @FunctionalInterface
     public interface UserChangeHandler {
         void onUserChanged();
     }
-
-    UserChangeHandler userChangeHandler;
 
     public void setUserChangeHandler(UserChangeHandler userChangeHandler) {
         this.userChangeHandler = userChangeHandler;

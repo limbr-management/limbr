@@ -34,6 +34,7 @@ import java.util.Collection;
  */
 @SpringComponent
 @UIScope
+@SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class UserEditorViewImpl extends VerticalLayout implements UserEditorView {
 
     @Autowired
@@ -118,4 +119,5 @@ public class UserEditorViewImpl extends VerticalLayout implements UserEditorView
     public void hide() {
         setVisible(false);
     }
+
 }

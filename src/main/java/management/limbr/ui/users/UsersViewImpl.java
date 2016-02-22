@@ -33,6 +33,7 @@ import java.util.Collection;
 
 @UIScope
 @SpringView(name = UsersViewImpl.VIEW_NAME)
+@SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     public static final String VIEW_NAME = "users";
 
@@ -45,7 +46,7 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     private Grid grid;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         grid = new Grid();
         TextField filter = new TextField();
         filter.setInputPrompt("Filter by username");
@@ -82,6 +83,6 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        // don't need this, everything happens in init
     }
 }

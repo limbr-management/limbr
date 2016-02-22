@@ -19,6 +19,10 @@
 
 package management.limbr.data.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -26,7 +30,9 @@ import java.util.Arrays;
 /**
  * Base class to be used by model entities.
  */
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
+    private static final Logger log = LoggerFactory.getLogger(BaseEntity.class);
+
     /**
      * Gets a textual representation of a POJO.
      *
@@ -49,10 +55,11 @@ public abstract class BaseEntity {
 
         for (Method method : methods) {
             String methodName = method.getName();
-            if ((methodName.startsWith("get")
+            boolean isProbablyGetter =(methodName.startsWith("get")
                     || methodName.startsWith("is")
-                    || methodName.startsWith("has"))
-                    && !(methodName.equals("hashCode") || methodName.equals("getClass"))) {
+                    || methodName.startsWith("has"));
+
+            if (isProbablyGetter && !("hashCode".equals(methodName) || "getClass".equals(methodName))) {
 
                 try {
                     // get the value FIRST so we don't append other things if we can't get it
@@ -62,7 +69,7 @@ public abstract class BaseEntity {
                     builder.append(value);
                     builder.append(',');
                 } catch (IllegalAccessException | InvocationTargetException ex) {
-                    // skip it
+                    log.debug("Trying to call method {0} on entity of type {1} threw an exception.", methodName, clazz.getTypeName(), ex);
                 }
             }
         }
@@ -88,7 +95,7 @@ public abstract class BaseEntity {
         return object.toString();
     }
 
-    private String methodNameToFieldName(String methodName) {
+    private static String methodNameToFieldName(String methodName) {
         String theRest;
         if (methodName.startsWith("get") || methodName.startsWith("has")) {
             theRest = methodName.substring(3);

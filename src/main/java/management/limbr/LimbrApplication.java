@@ -31,15 +31,17 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class LimbrApplication {
 
-    private static final Logger log = LoggerFactory.getLogger(LimbrApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LimbrApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(LimbrApplication.class, args);
-	}
+    public static void main(String[] args) {
+        LOG.info("Limbr is starting up.");
+        SpringApplication.run(LimbrApplication.class, args).close();
+        LOG.info("Limbr has stopped.");
+    }
 
     @Bean
     public CommandLineRunner loadData(UserRepository repository) {
-        return (args) -> {
+        return args -> {
             repository.save(new User("admin", "Admin", "deadbeef", "admin@limbr.management"));
             repository.save(new User("bob", "Bob Builder", "deadbeef", "bob@limbr.management"));
         };

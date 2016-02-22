@@ -35,12 +35,12 @@ import java.util.Set;
 public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPresenter.UserChangeHandler, Serializable {
 
     @Autowired
-    private UserRepository repository;
+    private transient UserRepository repository;
 
     @Autowired
     private UserEditorPresenter editorPresenter;
 
-    private UsersView view;
+    private transient UsersView view;
 
     @PostConstruct
     public void init() {

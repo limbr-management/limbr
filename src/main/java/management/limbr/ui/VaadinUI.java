@@ -39,9 +39,6 @@ public class VaadinUI extends UI {
     // TODO: We should have either a ViewAccessControl or a ViewInstanceAccessControl for security
     // (just make a bean -- Spring will give it to the SpringViewProvider)
 
-    public VaadinUI() {
-    }
-
     @Override
     protected void init(VaadinRequest request) {
 
@@ -78,4 +75,13 @@ public class VaadinUI extends UI {
         return button;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (obj instanceof VaadinUI) {
+            return viewProvider.equals(((VaadinUI) obj).viewProvider) && super.equals(obj);
+        }
+        return false;
+    }
 }
