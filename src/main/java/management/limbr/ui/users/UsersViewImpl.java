@@ -61,7 +61,7 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
 
         grid.addItemClickListener(e -> {
             if (e.isDoubleClick()) {
-                listeners.forEach(listener -> listener.editUser(e.getItem()));
+                listeners.forEach(listener -> listener.itemDoubleClicked(e.getItem()));
             }
         });
 

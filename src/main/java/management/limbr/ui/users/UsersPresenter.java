@@ -65,7 +65,7 @@ public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPr
 
     @Override
     @SuppressWarnings("unchecked")
-    public void editUser(Item user) {
+    public void itemDoubleClicked(Item user) {
         if (user == null || !(user instanceof BeanItem)) {
             editorPresenter.hide();
         } else {

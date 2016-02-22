@@ -29,7 +29,7 @@ public interface UsersView {
     interface UsersViewListener {
         BeanItemContainer<User> listUsers(String filter);
         void viewInitialized(UsersView view);
-        void editUser(Item user);
+        void itemDoubleClicked(Item user);
         void addNewClicked();
     }
 }
