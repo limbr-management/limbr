@@ -31,7 +31,7 @@ import java.util.Arrays;
  * Base class to be used by model entities.
  */
 public abstract class BaseEntity implements Serializable {
-    private static final Logger log = LoggerFactory.getLogger(BaseEntity.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BaseEntity.class);
 
     /**
      * Gets a textual representation of a POJO.
@@ -55,9 +55,9 @@ public abstract class BaseEntity implements Serializable {
 
         for (Method method : methods) {
             String methodName = method.getName();
-            boolean isProbablyGetter =(methodName.startsWith("get")
+            boolean isProbablyGetter = methodName.startsWith("get")
                     || methodName.startsWith("is")
-                    || methodName.startsWith("has"));
+                    || methodName.startsWith("has");
 
             if (isProbablyGetter && !("hashCode".equals(methodName) || "getClass".equals(methodName))) {
 
@@ -69,7 +69,7 @@ public abstract class BaseEntity implements Serializable {
                     builder.append(value);
                     builder.append(',');
                 } catch (IllegalAccessException | InvocationTargetException ex) {
-                    log.debug("Trying to call method {0} on entity of type {1} threw an exception.", methodName, clazz.getTypeName(), ex);
+                    LOG.debug("Trying to call method {0} on entity of type {1} threw an exception.", methodName, clazz.getTypeName(), ex);
                 }
             }
         }

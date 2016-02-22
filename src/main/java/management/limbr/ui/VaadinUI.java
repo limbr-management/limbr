@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Theme("valo")
 @SpringUI(path = "")
+@SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class VaadinUI extends UI {
     @Autowired
     SpringViewProvider viewProvider;
@@ -75,13 +76,4 @@ public class VaadinUI extends UI {
         return button;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        } else if (obj instanceof VaadinUI) {
-            return viewProvider.equals(((VaadinUI) obj).viewProvider) && super.equals(obj);
-        }
-        return false;
-    }
 }
