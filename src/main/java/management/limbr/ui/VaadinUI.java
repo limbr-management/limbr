@@ -76,4 +76,16 @@ public class VaadinUI extends UI {
         return button;
     }
 
+    public PrivilegeLevels getUserLevel() {
+        if (isLoggedIn()) {
+            return PrivilegeLevels.Admin;
+        } else {
+            return PrivilegeLevels.None;
+        }
+    }
+
+    public boolean isLoggedIn() {
+        return true;
+    }
+
 }

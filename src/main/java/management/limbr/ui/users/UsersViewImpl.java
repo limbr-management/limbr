@@ -25,12 +25,15 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
+import management.limbr.ui.PrivilegeLevels;
+import management.limbr.ui.RequiresPrivilege;
 import management.limbr.ui.usereditor.UserEditorViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 
+@RequiresPrivilege(level = PrivilegeLevels.Admin)
 @UIScope
 @SpringView(name = UsersViewImpl.VIEW_NAME)
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here

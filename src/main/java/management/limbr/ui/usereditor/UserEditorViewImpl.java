@@ -23,6 +23,8 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
+import management.limbr.ui.PrivilegeLevels;
+import management.limbr.ui.RequiresPrivilege;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +34,7 @@ import java.util.Collection;
 /**
  * A view used for editing a User object in the UI.
  */
+@RequiresPrivilege(level = PrivilegeLevels.Admin)
 @SpringComponent
 @UIScope
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here

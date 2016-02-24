@@ -24,9 +24,12 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import management.limbr.ui.PrivilegeLevels;
+import management.limbr.ui.RequiresPrivilege;
 
 import javax.annotation.PostConstruct;
 
+@RequiresPrivilege(level = PrivilegeLevels.None)
 @SpringView(name = DefaultView.VIEW_NAME)
 public class DefaultView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "";
