@@ -4,7 +4,7 @@ jdk:
 before_install: "git clone -b travis-ci-settings `git config --get remote.origin.url` travis"
 script:
     - "mvn test -B"
-    - "./run-sonar.sh"
+    - "bash ./run-sonar.sh"
 notifications:
   webhooks:
     urls:
