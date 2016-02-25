@@ -19,13 +19,24 @@
 
 package management.limbr.ui.login;
 
+import com.vaadin.ui.UI;
 import management.limbr.ui.Presenter;
+import management.limbr.ui.VaadinUI;
 
 @Presenter
 public class LogInPresenter implements LogInView.LogInViewListener {
 
+    private LogInView view;
+
+    @Override
+    public void viewInitialized(LogInView view) {
+        this.view = view;
+    }
+
     @Override
     public void logInClicked() {
         // TODO: implement
+        ((VaadinUI)UI.getCurrent()).setLoggedIn(true);
+        view.loggedIn();
     }
 }

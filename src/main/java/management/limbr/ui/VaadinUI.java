@@ -37,8 +37,7 @@ public class VaadinUI extends UI {
     @Autowired
     SpringViewProvider viewProvider;
 
-    // TODO: We should have either a ViewAccessControl or a ViewInstanceAccessControl for security
-    // (just make a bean -- Spring will give it to the SpringViewProvider)
+    private boolean loggedIn;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -85,7 +84,11 @@ public class VaadinUI extends UI {
     }
 
     public boolean isLoggedIn() {
-        return true;
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this. loggedIn = loggedIn;
     }
 
 }

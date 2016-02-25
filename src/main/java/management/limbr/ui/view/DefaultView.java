@@ -23,9 +23,11 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
+import management.limbr.ui.VaadinUI;
 
 import javax.annotation.PostConstruct;
 
@@ -36,11 +38,17 @@ public class DefaultView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("Please wait..."));
+        if (((VaadinUI)UI.getCurrent()).isLoggedIn()) {
+            addComponent(new Label("This is empty for now."));
+        } else {
+            addComponent(new Label("Please wait..."));
+        }
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        event.getNavigator().navigateTo("logIn");
+        if (!((VaadinUI)UI.getCurrent()).isLoggedIn()) {
+            event.getNavigator().navigateTo("logIn");
+        }
     }
 }

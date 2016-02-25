@@ -31,6 +31,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import management.limbr.LimbrApplication;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
+import management.limbr.ui.view.DefaultView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -94,6 +95,8 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
         mainLayout.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         setCompositionRoot(mainLayout);
+
+        listeners.forEach(listener -> listener.viewInitialized(this));
     }
 
     @Override
@@ -113,12 +116,12 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
 
     @Override
     public void reportError(String message) {
-        // TODO: implement
+        Notification.show(message);
     }
 
     @Override
     public void loggedIn() {
-        // TODO: implement
+        getUI().getNavigator().navigateTo(DefaultView.VIEW_NAME);
     }
 
     @Override
