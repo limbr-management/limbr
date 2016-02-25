@@ -1,0 +1,5 @@
+@import "../valo/valo.scss";
+
+@mixin limbr {
+    @include valo;
+}
