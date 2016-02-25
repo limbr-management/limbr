@@ -27,6 +27,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import management.limbr.ui.error.ErrorView;
 import management.limbr.ui.users.UsersViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,7 +66,8 @@ public class VaadinUI extends UI {
 
         Navigator navigator = new Navigator(this, viewContainer);
         navigator.addProvider(viewProvider);
-
+        navigator.setErrorProvider(viewProvider);
+        navigator.setErrorView(ErrorView.class);
     }
 
     private Button createNavButton(String caption, String view) {

@@ -17,21 +17,23 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.login;
+package management.limbr.ui.error;
 
-public interface LogInView {
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
+import management.limbr.ui.PrivilegeLevels;
+import management.limbr.ui.RequiresPrivilege;
 
-    void setUsername(String username);
-    String getUsername();
+@RequiresPrivilege(level = PrivilegeLevels.None)
+@SpringView(name = ErrorView.VIEW_NAME)
+public class ErrorView extends VerticalLayout implements View {
+    public static final String VIEW_NAME = "error";
 
-    String getPassword();
-
-    void reportError(String message);
-
-    void loggedIn();
-
-    interface LogInViewListener {
-        void logInClicked();
-        void viewInitialized(LogInView view);
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        addComponent(new Label("An error happened."));
     }
 }
