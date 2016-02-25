@@ -36,11 +36,11 @@ public class DefaultView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("I don't have anything for you yet."));
+        addComponent(new Label("Please wait..."));
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        // constructed in init(), nothing here
+        event.getNavigator().navigateTo("logIn");
     }
 }

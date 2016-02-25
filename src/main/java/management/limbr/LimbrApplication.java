@@ -33,6 +33,10 @@ public class LimbrApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(LimbrApplication.class);
 
+    public static String getApplicationName() {
+        return "Limbr";
+    }
+
     @SuppressWarnings("squid:S2095") // don't need to close the application context, it'll stick around 'til we die
     public static void main(String[] args) {
         LOG.info("Limbr is starting up.");
