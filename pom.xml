@@ -58,6 +58,7 @@
         <commons-codec.version>1.10</commons-codec.version>
         <surefire.version>2.19.1</surefire.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
+        <vaadin4spring-i18n.version>0.0.6.RELEASE</vaadin4spring-i18n.version>
 	</properties>
 
 	<dependencies>
@@ -83,6 +84,10 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-client-compiled</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring.addons</groupId>
+            <artifactId>vaadin-spring-addon-i18n</artifactId>
         </dependency>
 
         <!-- Tomcat Dependencies -->
@@ -174,6 +179,11 @@
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
                 <version>${vaadin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.spring.addons</groupId>
+                <artifactId>vaadin-spring-addon-i18n</artifactId>
+                <version>${vaadin4spring-i18n.version}</version>
             </dependency>
 
             <!-- Tomcat Dependencies -->

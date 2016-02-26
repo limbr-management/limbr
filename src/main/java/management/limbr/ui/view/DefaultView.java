@@ -28,6 +28,8 @@ import com.vaadin.ui.VerticalLayout;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
 import management.limbr.ui.VaadinUI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
 import javax.annotation.PostConstruct;
 
@@ -36,12 +38,15 @@ import javax.annotation.PostConstruct;
 public class DefaultView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "";
 
+    @Autowired
+    private I18N messages;
+
     @PostConstruct
     void init() {
         if (((VaadinUI)UI.getCurrent()).isLoggedIn()) {
             addComponent(new Label("This is empty for now."));
         } else {
-            addComponent(new Label("Please wait..."));
+            addComponent(new Label(messages.get("pleaseWait")));
         }
     }
 

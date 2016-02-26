@@ -27,8 +27,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.vaadin.spring.i18n.MessageProvider;
+import org.vaadin.spring.i18n.ResourceBundleMessageProvider;
+import org.vaadin.spring.i18n.annotation.EnableI18N;
 
 @SpringBootApplication
+@EnableI18N
 public class LimbrApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(LimbrApplication.class);
@@ -50,5 +54,10 @@ public class LimbrApplication {
             repository.save(new User("admin", "Admin", "e9bb0f231e2f35658dda443345a46f5d", "admin@limbr.management"));
             repository.save(new User("bob", "Bob Builder", "deadbeef", "bob@limbr.management"));
         };
+    }
+
+    @Bean
+    MessageProvider uiMessages() {
+        return new ResourceBundleMessageProvider("management.limbr.ui.Messages");
     }
 }

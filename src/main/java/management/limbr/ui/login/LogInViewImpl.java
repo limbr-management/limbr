@@ -33,6 +33,7 @@ import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
 import management.limbr.ui.view.DefaultView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -45,6 +46,10 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
 
     @Autowired
     private transient Collection<LogInViewListener> listeners;
+
+    @Autowired
+    private I18N messages;
+
     private TextField usernameField;
     private PasswordField passwordField;
 
@@ -52,23 +57,23 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
     public void init() {
         setSizeFull();
 
-        usernameField = new TextField("Username");
+        usernameField = new TextField(messages.get("usernameFieldLabel"));
         usernameField.setWidth(20.0f, Unit.EM);
         usernameField.setRequired(true);
-        usernameField.setInputPrompt("Enter your username");
-        usernameField.addValidator(new StringLengthValidator("Username must be at least 3 characters long.", 3, 256, false));
+        usernameField.setInputPrompt(messages.get("usernameFieldPrompt"));
+        usernameField.addValidator(new StringLengthValidator(messages.get("usernameFieldValidation"), 3, 256, false));
         usernameField.setImmediate(true);
         usernameField.setInvalidAllowed(false);
 
-        passwordField = new PasswordField("Password");
+        passwordField = new PasswordField(messages.get("passwordFieldLabel"));
         passwordField.setWidth(20.0f, Unit.EM);
-        passwordField.setInputPrompt("Enter your password");
-        passwordField.addValidator(new StringLengthValidator("Passwords must be at least 8 characters long.", 8, 256, false));
+        passwordField.setInputPrompt(messages.get("passwordFieldPrompt"));
+        passwordField.addValidator(new StringLengthValidator(messages.get("passwordFieldValidation"), 8, 256, false));
         passwordField.setImmediate(true);
         passwordField.setRequired(true);
         passwordField.setNullRepresentation("");
 
-        Button logInButton = new Button("Log In");
+        Button logInButton = new Button(messages.get("logInButtonLabel"));
         logInButton.addClickListener(event -> {
             usernameField.setValidationVisible(false);
             passwordField.setValidationVisible(false);
@@ -84,7 +89,7 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
         });
 
         VerticalLayout fields = new VerticalLayout(usernameField, passwordField, logInButton);
-        fields.setCaption("Enter your username and password to log in to " + LimbrApplication.getApplicationName() + ".");
+        fields.setCaption(messages.get("logInCaption", LimbrApplication.getApplicationName()));
         fields.setSpacing(true);
         fields.setMargin(new MarginInfo(true, true, true, false));
         fields.setSizeUndefined();
