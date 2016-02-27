@@ -39,7 +39,7 @@ public class DefaultView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "";
 
     @Autowired
-    private I18N messages;
+    private transient I18N messages;
 
     @PostConstruct
     void init() {

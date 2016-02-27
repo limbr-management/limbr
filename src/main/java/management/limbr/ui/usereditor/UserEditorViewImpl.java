@@ -45,7 +45,7 @@ public class UserEditorViewImpl extends Window implements UserEditorView {
     private transient Collection<UserEditorViewListener> listeners;
 
     @Autowired
-    private I18N messages;
+    private transient I18N messages;
 
     private TextField userName;
     private TextField displayName;

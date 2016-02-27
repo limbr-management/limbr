@@ -53,7 +53,7 @@ public class AccessController implements ViewAccessControl, ApplicationContextAw
 
             RequiresPrivilege annotation;
 
-            if (beanName.equals("defaultView")) {
+            if ("defaultView".equals(beanName)) {
                 // When the app is first loading, no view is selected yet and we'll crash if we call
                 // getBean, so we have a special case for this one.
                 annotation = DefaultView.class.getAnnotation(RequiresPrivilege.class);

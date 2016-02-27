@@ -48,7 +48,7 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     private transient Collection<UsersViewListener> listeners;
 
     @Autowired
-    private I18N messages;
+    private transient I18N messages;
 
     private Grid grid;
 

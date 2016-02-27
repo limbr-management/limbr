@@ -35,7 +35,7 @@ public class ErrorView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "error";
 
     @Autowired
-    private I18N messages;
+    private transient I18N messages;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {

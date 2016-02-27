@@ -32,6 +32,8 @@ import management.limbr.LimbrApplication;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
 import management.limbr.ui.view.DefaultView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
@@ -44,11 +46,13 @@ import java.util.Collection;
 public class LogInViewImpl extends CustomComponent implements View, LogInView {
     public static final String VIEW_NAME = "logIn";
 
+    private static final Logger LOG = LoggerFactory.getLogger(LogInViewImpl.class);
+
     @Autowired
     private transient Collection<LogInViewListener> listeners;
 
     @Autowired
-    private I18N messages;
+    private transient I18N messages;
 
     private TextField usernameField;
     private PasswordField passwordField;
@@ -84,6 +88,7 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
                 Notification.show(e.getMessage());
                 usernameField.setValidationVisible(true);
                 passwordField.setValidationVisible(true);
+                LOG.debug("Validation of log in fields failed.", e);
             }
             listeners.forEach(LogInViewListener::logInClicked);
         });
