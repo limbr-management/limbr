@@ -26,7 +26,7 @@ import management.limbr.ui.VaadinUI;
 @Presenter
 public class LogInPresenter implements LogInView.LogInViewListener {
 
-    private LogInView view;
+    private transient LogInView view;
 
     @Override
     public void viewInitialized(LogInView view) {
