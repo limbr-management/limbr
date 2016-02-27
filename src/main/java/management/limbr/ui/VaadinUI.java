@@ -23,6 +23,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
@@ -32,7 +33,7 @@ import management.limbr.ui.users.UsersViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
-@Theme("valo")
+@Theme("limbr")
 @SpringUI(path = "")
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class VaadinUI extends UI {
@@ -49,19 +50,24 @@ public class VaadinUI extends UI {
 
         final VerticalLayout root = new VerticalLayout();
         root.setSizeFull();
-        root.setMargin(true);
+        root.setMargin(new MarginInfo(false, false, false, true));
         root.setSpacing(true);
         setContent(root);
 
+        HorizontalLayout topBar = new HorizontalLayout();
+        topBar.setSpacing(true);
+
         Image logo = new Image(null, new ExternalResource("images/logo1.png"));
-        logo.setHeight(1.2f, Unit.EM);
+        logo.setHeight(31f, Unit.PIXELS);
         logo.setWidthUndefined();
+        topBar.addComponent(logo);
 
         CssLayout navBar = new CssLayout();
         navBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        navBar.addComponent(logo);
         navBar.addComponent(createNavButton(messages.get("usersNavigationLabel"), UsersViewImpl.VIEW_NAME));
-        root.addComponent(navBar);
+        topBar.addComponent(navBar);
+
+        root.addComponent(topBar);
 
         final Panel viewContainer = new Panel();
         viewContainer.setSizeFull();

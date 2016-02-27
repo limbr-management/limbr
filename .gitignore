@@ -77,4 +77,8 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
+### Vaadin ###
+*.css
+addons.scss
+
 ### Exceptions ###
