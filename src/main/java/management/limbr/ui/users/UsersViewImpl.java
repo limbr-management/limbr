@@ -29,6 +29,7 @@ import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
 import management.limbr.ui.usereditor.UserEditorViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -46,15 +47,18 @@ public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     @Autowired
     private transient Collection<UsersViewListener> listeners;
 
+    @Autowired
+    private I18N messages;
+
     private Grid grid;
 
     @PostConstruct
     public void init() {
         grid = new Grid();
         TextField filter = new TextField();
-        filter.setInputPrompt("Filter by username");
+        filter.setInputPrompt(messages.get("filterByUsernameLabel"));
         filter.addTextChangeListener(e -> listUsers(e.getText()));
-        Button addNewButton = new Button("New user", FontAwesome.PLUS);
+        Button addNewButton = new Button(messages.get("newUserButtonLabel"), FontAwesome.PLUS);
         HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
         actions.setSpacing(true);
         grid.removeAllColumns();

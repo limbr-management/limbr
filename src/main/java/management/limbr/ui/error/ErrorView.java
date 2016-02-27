@@ -26,14 +26,19 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
 @RequiresPrivilege(level = PrivilegeLevels.None)
 @SpringView(name = ErrorView.VIEW_NAME)
 public class ErrorView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "error";
 
+    @Autowired
+    private I18N messages;
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        addComponent(new Label("An error happened."));
+        addComponent(new Label(messages.get("errorHappened")));
     }
 }

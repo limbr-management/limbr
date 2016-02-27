@@ -26,6 +26,7 @@ import com.vaadin.ui.*;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -43,18 +44,30 @@ public class UserEditorViewImpl extends Window implements UserEditorView {
     @Autowired
     private transient Collection<UserEditorViewListener> listeners;
 
-    TextField userName = new TextField("Username");
-    TextField displayName = new TextField("Real name");
-    PasswordField password = new PasswordField("Password");
-    TextField emailAddress = new TextField("E-mail address");
+    @Autowired
+    private I18N messages;
 
-    private Button save = new Button("Save", FontAwesome.SAVE);
-    private Button cancel = new Button("Cancel");
-    private Button delete = new Button("Delete", FontAwesome.TRASH_O);
+    private TextField userName;
+    private TextField displayName;
+    private PasswordField password;
+    private TextField emailAddress;
+
+    private Button save;
+    private Button cancel;
 
     @PostConstruct
     public void init() {
         VerticalLayout content = new VerticalLayout();
+
+        userName = new TextField(messages.get("usernameFieldLabel"));
+        displayName = new TextField(messages.get("realNameFieldLabel"));
+        password = new PasswordField(messages.get("passwordFieldLabel"));
+        emailAddress = new TextField(messages.get("emailAddressFieldLabel"));
+
+        save = new Button(messages.get("saveButtonLabel"), FontAwesome.SAVE);
+        cancel = new Button(messages.get("cancelButtonLabel"));
+        Button delete = new Button(messages.get("deleteButtonLabel"), FontAwesome.TRASH_O);
+
         CssLayout actions = new CssLayout(save, cancel, delete);
         content.addComponents(userName, displayName, password, emailAddress, actions);
         content.setMargin(true);

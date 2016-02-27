@@ -31,6 +31,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import management.limbr.ui.error.ErrorView;
 import management.limbr.ui.users.UsersViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
 @Theme("limbr")
 @SpringUI(path = "")
@@ -38,6 +39,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class VaadinUI extends UI {
     @Autowired
     SpringViewProvider viewProvider;
+
+    @Autowired
+    private I18N messages;
 
     private boolean loggedIn;
 
@@ -60,7 +64,7 @@ public class VaadinUI extends UI {
 
         CssLayout navBar = new CssLayout();
         navBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        navBar.addComponent(createNavButton("Users", UsersViewImpl.VIEW_NAME));
+        navBar.addComponent(createNavButton(messages.get("usersNavigationLabel"), UsersViewImpl.VIEW_NAME));
         topBar.addComponent(navBar);
 
         root.addComponent(topBar);
