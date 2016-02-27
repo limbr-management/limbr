@@ -35,7 +35,7 @@ import java.util.Collection;
 /**
  * A view used for editing a User object in the UI.
  */
-@RequiresPrivilege(level = PrivilegeLevels.Admin)
+@RequiresPrivilege(level = PrivilegeLevels.ADMIN)
 @SpringComponent
 @UIScope
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here

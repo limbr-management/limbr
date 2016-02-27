@@ -20,16 +20,16 @@
 package management.limbr.ui;
 
 public enum PrivilegeLevels {
-    None,
-    Admin;
+    NONE,
+    ADMIN;
 
     public boolean hasLevel(PrivilegeLevels level) {
-        if (this == None) {
-            if (level == None) {
+        if (this == NONE) {
+            if (level == NONE) {
                 return true;
             }
-        } else if (this == Admin) {
-            if (level == Admin || level == None) {
+        } else if (this == ADMIN) {
+            if (level == ADMIN || level == NONE) {
                 return true;
             }
         }

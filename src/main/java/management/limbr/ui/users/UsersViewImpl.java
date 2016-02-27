@@ -34,7 +34,7 @@ import org.vaadin.spring.i18n.I18N;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 
-@RequiresPrivilege(level = PrivilegeLevels.Admin)
+@RequiresPrivilege(level = PrivilegeLevels.ADMIN)
 @UIScope
 @SpringView(name = UsersViewImpl.VIEW_NAME)
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here

@@ -40,7 +40,7 @@ import org.vaadin.spring.i18n.I18N;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 
-@RequiresPrivilege(level = PrivilegeLevels.None)
+@RequiresPrivilege(level = PrivilegeLevels.NONE)
 @UIScope
 @SpringView(name = LogInViewImpl.VIEW_NAME)
 public class LogInViewImpl extends CustomComponent implements View, LogInView {

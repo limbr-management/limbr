@@ -29,7 +29,7 @@ import management.limbr.ui.RequiresPrivilege;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
-@RequiresPrivilege(level = PrivilegeLevels.None)
+@RequiresPrivilege(level = PrivilegeLevels.NONE)
 @SpringView(name = ErrorView.VIEW_NAME)
 public class ErrorView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "error";

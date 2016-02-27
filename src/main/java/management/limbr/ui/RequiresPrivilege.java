@@ -25,5 +25,5 @@ import java.lang.annotation.Target;
 @Target({ java.lang.annotation.ElementType.TYPE })
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 public @interface RequiresPrivilege {
-    PrivilegeLevels level() default PrivilegeLevels.None;
+    PrivilegeLevels level() default PrivilegeLevels.NONE;
 }

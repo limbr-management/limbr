@@ -41,7 +41,7 @@ public class VaadinUI extends UI {
     SpringViewProvider viewProvider;
 
     @Autowired
-    private I18N messages;
+    private transient I18N messages;
 
     private boolean loggedIn;
 
@@ -89,9 +89,9 @@ public class VaadinUI extends UI {
 
     public PrivilegeLevels getUserLevel() {
         if (isLoggedIn()) {
-            return PrivilegeLevels.Admin;
+            return PrivilegeLevels.ADMIN;
         } else {
-            return PrivilegeLevels.None;
+            return PrivilegeLevels.NONE;
         }
     }
 

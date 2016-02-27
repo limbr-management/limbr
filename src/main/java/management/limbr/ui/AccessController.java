@@ -22,7 +22,6 @@ package management.limbr.ui;
 import com.vaadin.spring.access.ViewAccessControl;
 import com.vaadin.ui.UI;
 import management.limbr.ui.view.DefaultView;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -30,9 +29,9 @@ import org.springframework.stereotype.Component;
 /**
  * Provides security to views.
  *
- * If a view is restricted to admins by @RequiresPrivilege(level = PrivilegeLevels.Admin),
+ * If a view is restricted to admins by @RequiresPrivilege(level = PrivilegeLevels.ADMIN),
  * for example, then the view will not be available to anyone who doesn't have at least
- * Admin level.
+ * ADMIN level.
  */
 @Component
 public class AccessController implements ViewAccessControl, ApplicationContextAware {
@@ -69,7 +68,7 @@ public class AccessController implements ViewAccessControl, ApplicationContextAw
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 }
