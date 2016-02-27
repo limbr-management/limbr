@@ -79,5 +79,6 @@ buildNumber.properties
 
 ### Vaadin ###
 *.css
+addons.scss
 
 ### Exceptions ###
