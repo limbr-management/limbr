@@ -27,8 +27,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.i18n.I18N;
 
 @RequiresPrivilege(level = PrivilegeLevels.NONE)
 @UIScope
@@ -37,15 +35,12 @@ import org.vaadin.spring.i18n.I18N;
 public class ErrorView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "error";
 
-    private transient I18N messages;
-
-    @Autowired
-    public ErrorView(I18N messages) {
-        this.messages = messages;
-    }
+    // TODO: Figure out how to handle localization and such in this class.
+    // It gets instantiated directly with new ErrorView(), not with Spring,
+    // so @Autowired doesn't work.
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        addComponent(new Label(messages.get("errorHappened")));
+        addComponent(new Label("An error happened."));
     }
 }
