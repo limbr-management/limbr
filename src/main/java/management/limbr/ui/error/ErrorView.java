@@ -22,6 +22,7 @@ package management.limbr.ui.error;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import management.limbr.ui.PrivilegeLevels;
@@ -30,12 +31,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
 @RequiresPrivilege(level = PrivilegeLevels.NONE)
+@UIScope
 @SpringView(name = ErrorView.VIEW_NAME)
 public class ErrorView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "error";
 
-    @Autowired
     private transient I18N messages;
+
+    @Autowired
+    public ErrorView(I18N messages) {
+        this.messages = messages;
+    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {

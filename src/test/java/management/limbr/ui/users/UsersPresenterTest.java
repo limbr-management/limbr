@@ -26,7 +26,6 @@ import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
 import management.limbr.ui.VaadinUI;
 import management.limbr.ui.usereditor.UserEditorPresenter;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -51,9 +50,7 @@ public class UsersPresenterTest {
         repository = mock(UserRepository.class);
         userEditorPresenter = mock(UserEditorPresenter.class);
 
-        presenter = new UsersPresenter();
-        ReflectionTestUtils.setField(presenter, "repository", repository);
-        ReflectionTestUtils.setField(presenter, "editorPresenter", userEditorPresenter);
+        presenter = new UsersPresenter(repository, userEditorPresenter);
         presenter.viewInitialized(view);
         presenter.init();
 

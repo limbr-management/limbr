@@ -27,7 +27,6 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
-import management.limbr.ui.usereditor.UserEditorViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
@@ -41,16 +40,17 @@ import java.util.Collection;
 public class UsersViewImpl extends VerticalLayout implements View, UsersView {
     public static final String VIEW_NAME = "users";
 
-    @Autowired
-    private UserEditorViewImpl editorView;
-
-    @Autowired
     private transient Collection<UsersViewListener> listeners;
 
-    @Autowired
     private transient I18N messages;
 
     private Grid grid;
+
+    @Autowired
+    public UsersViewImpl(Collection<UsersViewListener> listeners, I18N messages) {
+        this.listeners = listeners;
+        this.messages = messages;
+    }
 
     @PostConstruct
     public void init() {

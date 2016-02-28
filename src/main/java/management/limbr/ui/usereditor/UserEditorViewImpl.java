@@ -41,10 +41,8 @@ import java.util.Collection;
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class UserEditorViewImpl extends Window implements UserEditorView {
 
-    @Autowired
     private transient Collection<UserEditorViewListener> listeners;
 
-    @Autowired
     private transient I18N messages;
 
     private TextField userName;
@@ -54,6 +52,12 @@ public class UserEditorViewImpl extends Window implements UserEditorView {
 
     private Button save;
     private Button cancel;
+
+    @Autowired
+    public UserEditorViewImpl(Collection<UserEditorViewListener> listeners, I18N messages) {
+        this.listeners = listeners;
+        this.messages = messages;
+    }
 
     @PostConstruct
     public void init() {

@@ -48,14 +48,18 @@ public class LogInViewImpl extends CustomComponent implements View, LogInView {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogInViewImpl.class);
 
-    @Autowired
     private transient Collection<LogInViewListener> listeners;
 
-    @Autowired
     private transient I18N messages;
 
     private TextField usernameField;
     private PasswordField passwordField;
+
+    @Autowired
+    public LogInViewImpl(Collection<LogInViewListener> listeners, I18N messages) {
+        this.listeners = listeners;
+        this.messages = messages;
+    }
 
     @PostConstruct
     public void init() {

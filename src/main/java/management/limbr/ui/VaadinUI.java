@@ -37,11 +37,15 @@ import org.vaadin.spring.i18n.I18N;
 @SpringUI(path = "")
 @SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class VaadinUI extends UI {
-    @Autowired
     SpringViewProvider viewProvider;
 
-    @Autowired
     private transient I18N messages;
+
+    @Autowired
+    public VaadinUI(SpringViewProvider viewProvider, I18N messages) {
+        this.viewProvider = viewProvider;
+        this.messages = messages;
+    }
 
     @Override
     protected void init(VaadinRequest request) {

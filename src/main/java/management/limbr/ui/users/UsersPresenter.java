@@ -35,13 +35,17 @@ import java.io.Serializable;
 @Presenter
 public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPresenter.UserChangeHandler, Serializable {
 
-    @Autowired
     private transient UserRepository repository;
 
-    @Autowired
     private UserEditorPresenter editorPresenter;
 
     private transient UsersView view;
+
+    @Autowired
+    public UsersPresenter(UserRepository repository, UserEditorPresenter editorPresenter) {
+        this.repository = repository;
+        this.editorPresenter = editorPresenter;
+    }
 
     @PostConstruct
     public void init() {

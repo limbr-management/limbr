@@ -37,11 +37,15 @@ import javax.annotation.PostConstruct;
 public class DefaultView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "";
 
-    @Autowired
     private transient I18N messages;
 
-    @Autowired
     private ClientState clientState;
+
+    @Autowired
+    public DefaultView(ClientState clientState, I18N messages) {
+        this.clientState = clientState;
+        this.messages = messages;
+    }
 
     @PostConstruct
     void init() {
