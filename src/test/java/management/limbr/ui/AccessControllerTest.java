@@ -45,4 +45,18 @@ public class AccessControllerTest {
         verify(mockContext).getBean("bean");
         verify(clientState).getUserLevel();
     }
+
+    public void grantsAccessToDefaultViewBasedOnAnnotation() {
+        ApplicationContext mockContext = mock(ApplicationContext.class);
+        ClientState clientState = mock(ClientState.class);
+        AccessController accessController = new AccessController(clientState);
+        accessController.setApplicationContext(mockContext);
+
+        when(clientState.getUserLevel()).thenReturn(PrivilegeLevels.NONE);
+
+        assertEquals(accessController.isAccessGranted(null, "defaultView"), true);
+
+        verifyNoMoreInteractions(mockContext);
+        verify(clientState).getUserLevel();
+    }
 }
