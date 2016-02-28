@@ -43,6 +43,7 @@ import java.util.Collection;
 @RequiresPrivilege(level = PrivilegeLevels.NONE)
 @UIScope
 @SpringView(name = LogInViewImpl.VIEW_NAME)
+@SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class LogInViewImpl extends CustomComponent implements View, LogInView {
     public static final String VIEW_NAME = "logIn";
 

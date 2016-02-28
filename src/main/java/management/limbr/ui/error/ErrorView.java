@@ -33,6 +33,7 @@ import org.vaadin.spring.i18n.I18N;
 @RequiresPrivilege(level = PrivilegeLevels.NONE)
 @UIScope
 @SpringView(name = ErrorView.VIEW_NAME)
+@SuppressWarnings({"squid:S2160"}) // don't need to override equals here
 public class ErrorView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "error";
 

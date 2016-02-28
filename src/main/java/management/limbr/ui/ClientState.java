@@ -21,8 +21,10 @@ package management.limbr.ui;
 
 import com.vaadin.spring.annotation.SpringComponent;
 
+import java.io.Serializable;
+
 @SpringComponent
-public class ClientState {
+public class ClientState implements Serializable {
     private boolean loggedIn;
 
     public PrivilegeLevels getUserLevel() {
