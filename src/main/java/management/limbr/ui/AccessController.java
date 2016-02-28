@@ -22,6 +22,7 @@ package management.limbr.ui;
 import com.vaadin.spring.access.ViewAccessControl;
 import com.vaadin.ui.UI;
 import management.limbr.ui.view.DefaultView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,13 @@ import org.springframework.stereotype.Component;
 public class AccessController implements ViewAccessControl, ApplicationContextAware {
     private ApplicationContext applicationContext;
 
+    private ClientState clientState;
+
+    @Autowired
+    public AccessController(ClientState clientState) {
+        this.clientState = clientState;
+    }
+
     /**
      * Determines if access can be granted to a particular user to a particular view.
      * Gets the current user from the UI.
@@ -47,24 +55,17 @@ public class AccessController implements ViewAccessControl, ApplicationContextAw
      */
     @Override
     public boolean isAccessGranted(UI ui, String beanName) {
-        if (ui instanceof VaadinUI) {
-            VaadinUI vaadinUI = (VaadinUI)ui;
+        RequiresPrivilege annotation;
 
-            RequiresPrivilege annotation;
-
-            if ("defaultView".equals(beanName)) {
-                // When the app is first loading, no view is selected yet and we'll crash if we call
-                // getBean, so we have a special case for this one.
-                annotation = DefaultView.class.getAnnotation(RequiresPrivilege.class);
-            } else {
-                annotation = applicationContext.getBean(beanName).getClass().getAnnotation(RequiresPrivilege.class);
-            }
-
-            if (annotation != null && vaadinUI.getUserLevel().hasLevel(annotation.level())) {
-                return true;
-            }
+        if ("defaultView".equals(beanName)) {
+            // When the app is first loading, no view is selected yet and we'll crash if we call
+            // getBean, so we have a special case for this one.
+            annotation = DefaultView.class.getAnnotation(RequiresPrivilege.class);
+        } else {
+            annotation = applicationContext.getBean(beanName).getClass().getAnnotation(RequiresPrivilege.class);
         }
-        return false;
+
+        return annotation != null && clientState.getUserLevel().hasLevel(annotation.level());
     }
 
     @Override

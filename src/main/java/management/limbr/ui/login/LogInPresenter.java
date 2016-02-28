@@ -19,14 +19,21 @@
 
 package management.limbr.ui.login;
 
-import com.vaadin.ui.UI;
+import management.limbr.ui.ClientState;
 import management.limbr.ui.Presenter;
-import management.limbr.ui.VaadinUI;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Presenter
 public class LogInPresenter implements LogInView.LogInViewListener {
 
     private transient LogInView view;
+
+    private ClientState clientState;
+
+    @Autowired
+    public LogInPresenter(ClientState clientState) {
+        this.clientState = clientState;
+    }
 
     @Override
     public void viewInitialized(LogInView view) {
@@ -36,7 +43,7 @@ public class LogInPresenter implements LogInView.LogInViewListener {
     @Override
     public void logInClicked() {
         // TODO: implement
-        ((VaadinUI)UI.getCurrent()).setLoggedIn(true);
+        clientState.setLoggedIn(true);
         view.loggedIn();
     }
 }

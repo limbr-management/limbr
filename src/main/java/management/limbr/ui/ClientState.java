@@ -17,24 +17,28 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.login;
+package management.limbr.ui;
 
-import management.limbr.ui.ClientState;
-import org.testng.annotations.Test;
+import com.vaadin.spring.annotation.SpringComponent;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+@SpringComponent
+public class ClientState {
+    private boolean loggedIn;
 
-@Test
-public class LogInPresenterTest {
-    public void logsInWhenClicked() {
-        ClientState clientState = mock(ClientState.class);
-        LogInView view = mock(LogInView.class);
-        LogInPresenter presenter = new LogInPresenter(clientState);
-        presenter.viewInitialized(view);
-        presenter.logInClicked();
-
-        verify(clientState).setLoggedIn(true);
-        verify(view).loggedIn();
+    public PrivilegeLevels getUserLevel() {
+        if (isLoggedIn()) {
+            return PrivilegeLevels.ADMIN;
+        } else {
+            return PrivilegeLevels.NONE;
+        }
     }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this. loggedIn = loggedIn;
+    }
+
 }

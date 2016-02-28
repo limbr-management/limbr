@@ -43,8 +43,6 @@ public class VaadinUI extends UI {
     @Autowired
     private transient I18N messages;
 
-    private boolean loggedIn;
-
     @Override
     protected void init(VaadinRequest request) {
 
@@ -86,21 +84,4 @@ public class VaadinUI extends UI {
         button.addClickListener(e -> getUI().getNavigator().navigateTo(view));
         return button;
     }
-
-    public PrivilegeLevels getUserLevel() {
-        if (isLoggedIn()) {
-            return PrivilegeLevels.ADMIN;
-        } else {
-            return PrivilegeLevels.NONE;
-        }
-    }
-
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public void setLoggedIn(boolean loggedIn) {
-        this. loggedIn = loggedIn;
-    }
-
 }

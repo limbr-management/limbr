@@ -23,11 +23,10 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import management.limbr.ui.ClientState;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
-import management.limbr.ui.VaadinUI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
@@ -41,9 +40,12 @@ public class DefaultView extends VerticalLayout implements View {
     @Autowired
     private transient I18N messages;
 
+    @Autowired
+    private ClientState clientState;
+
     @PostConstruct
     void init() {
-        if (((VaadinUI)UI.getCurrent()).isLoggedIn()) {
+        if (clientState.isLoggedIn()) {
             addComponent(new Label("This is empty for now."));
         } else {
             addComponent(new Label(messages.get("pleaseWait")));
@@ -52,7 +54,7 @@ public class DefaultView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        if (!((VaadinUI)UI.getCurrent()).isLoggedIn()) {
+        if (!clientState.isLoggedIn()) {
             event.getNavigator().navigateTo("logIn");
         }
     }

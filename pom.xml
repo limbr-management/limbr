@@ -50,7 +50,8 @@
         <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.coverage.exclusions>
             **/management/limbr/ui/**/*View.java,
-            **/management/limbr/ui/**/*ViewImpl.java
+            **/management/limbr/ui/**/*ViewImpl.java,
+            **/management/limbr/ui/VaadinUI.java
         </sonar.coverage.exclusions>
 
         <vaadin.version>7.4.4</vaadin.version>

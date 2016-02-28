@@ -29,20 +29,20 @@ import static org.testng.Assert.assertEquals;
 public class AccessControllerTest {
     public void grantsAccessBasedOnAnnotation() {
         ApplicationContext mockContext = mock(ApplicationContext.class);
-        AccessController accessController = new AccessController();
+        ClientState clientState = mock(ClientState.class);
+        AccessController accessController = new AccessController(clientState);
         accessController.setApplicationContext(mockContext);
-        VaadinUI mockUI = mock(VaadinUI.class);
 
         @RequiresPrivilege(level = PrivilegeLevels.ADMIN)
         class ABean {}
         ABean aBean = new ABean();
 
         when(mockContext.getBean("bean")).thenReturn(aBean);
-        when(mockUI.getUserLevel()).thenReturn(PrivilegeLevels.ADMIN);
+        when(clientState.getUserLevel()).thenReturn(PrivilegeLevels.ADMIN);
 
-        assertEquals(accessController.isAccessGranted(mockUI, "bean"), true);
+        assertEquals(accessController.isAccessGranted(null, "bean"), true);
 
         verify(mockContext).getBean("bean");
-        verify(mockUI).getUserLevel();
+        verify(clientState).getUserLevel();
     }
 }
