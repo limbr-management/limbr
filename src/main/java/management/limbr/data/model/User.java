@@ -19,6 +19,7 @@
 
 package management.limbr.data.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ public class User extends BaseEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     private String displayName;
@@ -38,7 +40,7 @@ public class User extends BaseEntity {
 
     private String emailAddress;
 
-    protected User() {}
+    public User() {}
 
     public User(String username, String displayName, String passwordHash, String emailAddress) {
         this.username = username;
