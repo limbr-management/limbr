@@ -24,7 +24,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Random;
+import java.util.*;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
@@ -94,7 +94,25 @@ public class PojoTester<T> {
         } else if (type.equals(String.class)) {
             return Long.toString(random.nextLong());
         } else {
-            throw new IllegalStateException("PojoTester does not yet support reference types like " + type.getName());
+            return createRichObject(type);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T createRichObject(Class<T> type) {
+        try {
+            if (type.equals(Set.class)) {
+                return (T)new HashSet<>();
+            } else if (type.equals(List.class)) {
+                return (T)new ArrayList<>();
+            } else if (type.isEnum()) {
+                T[] values = type.getEnumConstants();
+                return values[random.nextInt(values.length)];
+            } else {
+                return type.newInstance();
+            }
+        } catch (IllegalAccessException | InstantiationException ex) {
+            throw new IllegalStateException("Couldn't construct object of type " + type.getName() + ".", ex);
         }
     }
 
