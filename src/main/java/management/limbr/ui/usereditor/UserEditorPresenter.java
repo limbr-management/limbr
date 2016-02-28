@@ -33,10 +33,8 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
     @SuppressWarnings("squid:S2068") // it's not a hard-coded password
     public static final String PASSWORD_PLACEHOLDER = "$notPass$12345678";
 
-    @Autowired
     private transient UserRepository repository;
 
-    @Autowired
     private transient UserUtil userUtil;
 
     private User user;
@@ -44,6 +42,12 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
     private transient UserEditorView view;
 
     private transient UserChangeHandler userChangeHandler;
+
+    @Autowired
+    public UserEditorPresenter(UserRepository repository, UserUtil userUtil) {
+        this.repository = repository;
+        this.userUtil = userUtil;
+    }
 
     public void hide() {
         view.hide();
@@ -60,7 +64,7 @@ public class UserEditorPresenter implements UserEditorView.UserEditorViewListene
 
         view.setCancelVisible(persisted);
 
-        BeanFieldGroup.bindFieldsUnbuffered(user, this);
+        BeanFieldGroup.bindFieldsUnbuffered(user, view);
 
         view.setUsername(u.getUsername());
         view.setPassword(PASSWORD_PLACEHOLDER);
