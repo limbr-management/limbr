@@ -40,7 +40,7 @@ public class ClientState implements Serializable {
     }
 
     public void setLoggedIn(boolean loggedIn) {
-        this. loggedIn = loggedIn;
+        this.loggedIn = loggedIn;
     }
 
 }
