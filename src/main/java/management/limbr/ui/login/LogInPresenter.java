@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Presenter
 public class LogInPresenter implements LogInView.LogInViewListener {
 
-    private transient LogInView view;
+    private LogInView view;
 
     private ClientState clientState;
 
