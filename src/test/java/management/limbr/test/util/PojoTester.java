@@ -57,7 +57,7 @@ public class PojoTester<T> {
                 testGetter(getter, field);
             }
 
-            Method setter = findSetter(clazz, fieldName);
+            Method setter = findSetter(clazz, fieldName, field.getType());
             if (setter != null) {
                 testSetter(setter, field);
             }
@@ -108,10 +108,10 @@ public class PojoTester<T> {
         assertEquals(ReflectionTestUtils.getField(pojo, field.getName()), testValue);
     }
 
-    private Method findSetter(Class<T> clazz, String fieldName) {
+    private Method findSetter(Class<T> clazz, String fieldName, Class<?> fieldType) {
         final String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
         try {
-            return clazz.getMethod(methodName);
+            return clazz.getMethod(methodName, fieldType);
         } catch (NoSuchMethodException | SecurityException ex) {
             return null;
         }
