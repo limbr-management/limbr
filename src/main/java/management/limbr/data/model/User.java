@@ -40,7 +40,9 @@ public class User extends BaseEntity {
 
     private String emailAddress;
 
-    public User() {}
+    public User() {
+        // defaults
+    }
 
     public User(String username, String displayName, String passwordHash, String emailAddress) {
         this.username = username;
