@@ -22,6 +22,7 @@ package management.limbr.ui.entity;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import management.limbr.data.model.BaseEntity;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
@@ -113,5 +114,26 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
     @Override
     public void hide() {
         close();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof EntityEditorViewImpl) {
+            EntityEditorViewImpl view = (EntityEditorViewImpl)obj;
+            return view.entityClass.equals(entityClass) && view.fieldMap.equals(fieldMap) &&
+                view.save.equals(save) && view.delete.equals(delete) && super.equals(obj);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(3, 37)
+                .append(entityClass)
+                .append(fieldMap)
+                .append(save)
+                .append(delete)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 }

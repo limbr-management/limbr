@@ -35,8 +35,8 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
     private transient JpaRepository<T, Long> repository;
     private T entity;
     private transient EntityEditorView<T> view;
-    private EntityChangeHandler entityChangeHandler;
-    private ApplicationContext applicationContext;
+    private transient EntityChangeHandler entityChangeHandler;
+    private transient ApplicationContext applicationContext;
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityEditorPresenter.class);
 
@@ -139,9 +139,11 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         try {
             getter = entity.getClass().getDeclaredMethod("get" + name.substring(0, 1).toUpperCase() + name.substring(1));
         } catch (NoSuchMethodException ex1) {
+            LOG.debug("Didn't find getter starting with \"get\" for " + name + " in " + entity.getClass().getName(), ex1);
             try {
                 getter = entity.getClass().getDeclaredMethod("is" + name.substring(0, 1).toUpperCase() + name.substring(1));
             } catch (NoSuchMethodException ex2) {
+                LOG.debug("Didn't find getter for " + name + " in " + entity.getClass().getName(), ex2);
                 return null;
             }
         }
@@ -149,6 +151,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         try {
             return getter.invoke(entity);
         } catch (IllegalAccessException | InvocationTargetException ex) {
+            LOG.debug("Couldn't execute getter: " + getter);
             return entity;
         }
     }
@@ -159,13 +162,14 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
             LOG.debug("Looking for setter for " + name + " in entity " + entity + " with value " + value);
             setter = entity.getClass().getDeclaredMethod("set" + name.substring(0, 1).toUpperCase() + name.substring(1), value.getClass());
         } catch (NoSuchMethodException ex) {
+            LOG.debug("Didn't find setter for " + name + " in " + entity.getClass().getName(), ex);
             return;
         }
 
         try {
             setter.invoke(entity, value);
         } catch (IllegalAccessException | InvocationTargetException ex) {
-            // oops
+            LOG.debug("Couldn't execute setter: " + setter);
         }
     }
 }

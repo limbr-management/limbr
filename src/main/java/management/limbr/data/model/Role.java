@@ -22,6 +22,7 @@ package management.limbr.data.model;
 import javax.persistence.*;
 
 @Entity
+@SuppressWarnings({"common-java:DuplicatedBlocks"})
 public class Role extends BaseEntity {
 
     @Id

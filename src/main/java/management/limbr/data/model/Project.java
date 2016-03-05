@@ -25,6 +25,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@SuppressWarnings({"common-java:DuplicatedBlocks"})
 public class Project extends BaseEntity {
 
     @Id
