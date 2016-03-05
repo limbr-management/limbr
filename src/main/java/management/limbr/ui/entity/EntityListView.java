@@ -23,12 +23,12 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.model.BaseEntity;
 
-public interface EntityListView<T extends BaseEntity> {
+public interface EntityListView {
     void refresh();
 
     interface Listener<T extends BaseEntity> {
         BeanItemContainer<T> listEntities(String filter);
-        void viewInitialized(EntityListView<T> view);
+        void viewInitialized(EntityListView view);
         void itemDoubleClicked(Item item);
         void addNewClicked();
     }

@@ -62,6 +62,7 @@
         <surefire.version>2.19.1</surefire.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
         <vaadin4spring-i18n.version>0.0.6.RELEASE</vaadin4spring-i18n.version>
+        <commons-lang.version>3.4</commons-lang.version>
 	</properties>
 
 	<dependencies>
@@ -94,6 +95,10 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -155,6 +160,11 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang.version}</version>
             </dependency>
 
             <!-- Test Dependencies -->

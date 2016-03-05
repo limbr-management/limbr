@@ -24,13 +24,14 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import management.limbr.data.model.BaseEntity;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 
-public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalLayout implements View, EntityListView<T> {
+public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalLayout implements View, EntityListView {
     private transient Collection<EntityListView.Listener<T>> listeners;
     private transient I18N messages;
     private Grid grid;
@@ -78,5 +79,19 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
 
     private void listEntities(String filter) {
         listeners.forEach(listener -> grid.setContainerDataSource(listener.listEntities(filter)));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof EntityListViewImpl) {
+            EntityListViewImpl view = (EntityListViewImpl)obj;
+            return (grid == view.grid) && super.equals(obj);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 47).append(grid).appendSuper(super.hashCode()).toHashCode();
     }
 }

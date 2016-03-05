@@ -19,8 +19,7 @@
 
 package management.limbr.ui.projects;
 
-import management.limbr.data.model.Project;
 import management.limbr.ui.entity.EntityListView;
 
-public interface ProjectsView extends EntityListView<Project> {
+public interface ProjectsView extends EntityListView {
 }

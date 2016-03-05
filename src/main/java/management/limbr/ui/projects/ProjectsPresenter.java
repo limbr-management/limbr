@@ -33,7 +33,7 @@ import java.io.Serializable;
 @Presenter
 public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serializable {
     private transient ProjectRepository repository;
-    private transient EntityListView<Project> view;
+    private transient EntityListView view;
 
     @Autowired
     public ProjectsPresenter(ProjectRepository repository) {
@@ -50,7 +50,7 @@ public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serial
     }
 
     @Override
-    public void viewInitialized(EntityListView<Project> view) {
+    public void viewInitialized(EntityListView view) {
         this.view = view;
     }
 
