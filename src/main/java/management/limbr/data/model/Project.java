@@ -32,6 +32,7 @@ public class Project extends BaseEntity {
     private Long id;
 
     @Column(unique = true)
+    @ListColumn
     private String name;
 
     @Column(unique = true)

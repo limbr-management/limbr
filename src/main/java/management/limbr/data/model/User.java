@@ -32,12 +32,15 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(unique = true)
+    @ListColumn
     private String username;
 
+    @ListColumn
     private String displayName;
 
     private String passwordHash;
 
+    @ListColumn
     private String emailAddress;
 
     public User() {

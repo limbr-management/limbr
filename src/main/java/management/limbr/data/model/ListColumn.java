@@ -17,9 +17,12 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.users;
+package management.limbr.data.model;
 
-import management.limbr.ui.entity.EntityListView;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.RetentionPolicy;
 
-public interface UsersView extends EntityListView {
+@java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
+@java.lang.annotation.Target(ElementType.FIELD)
+public @interface ListColumn {
 }

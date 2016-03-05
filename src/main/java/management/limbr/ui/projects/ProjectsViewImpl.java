@@ -39,6 +39,6 @@ public class ProjectsViewImpl extends EntityListViewImpl<Project> {
 
     @Autowired
     public ProjectsViewImpl(Collection<EntityListView.Listener<Project>> listeners, I18N messages) {
-        super(listeners, messages);
+        super(Project.class, listeners, messages);
     }
 }

@@ -25,6 +25,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
 import management.limbr.ui.Presenter;
+import management.limbr.ui.entity.EntityListView;
 import management.limbr.ui.usereditor.UserEditorPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -33,13 +34,13 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 
 @Presenter
-public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPresenter.UserChangeHandler, Serializable {
+public class UsersPresenter implements EntityListView.Listener<User>, UserEditorPresenter.UserChangeHandler, Serializable {
 
     private transient UserRepository repository;
 
     private UserEditorPresenter editorPresenter;
 
-    private transient UsersView view;
+    private transient EntityListView view;
 
     @Autowired
     public UsersPresenter(UserRepository repository, UserEditorPresenter editorPresenter) {
@@ -53,12 +54,12 @@ public class UsersPresenter implements UsersView.UsersViewListener, UserEditorPr
     }
 
     @Override
-    public void viewInitialized(UsersView view) {
+    public void viewInitialized(EntityListView view) {
         this.view = view;
     }
 
     @Override
-    public BeanItemContainer<User> listUsers(String filter) {
+    public BeanItemContainer<User> listEntities(String filter) {
         if (StringUtils.isEmpty(filter)) {
             return new BeanItemContainer<>(User.class, repository.findAll());
         } else {

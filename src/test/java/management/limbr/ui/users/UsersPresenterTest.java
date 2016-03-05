@@ -60,7 +60,7 @@ public class UsersPresenterTest {
     public void listsUsersEmptyFilter() {
         User mockUser = mock(User.class);
         when(repository.findAll()).thenReturn(Collections.singletonList(mockUser));
-        BeanItemContainer<User> result = presenter.listUsers("");
+        BeanItemContainer<User> result = presenter.listEntities("");
         assertEquals(result.size(), 1);
         assertEquals(result.getIdByIndex(0), mockUser);
     }
@@ -68,7 +68,7 @@ public class UsersPresenterTest {
     public void listsUsersWithFilter() {
         User mockUser = mock(User.class);
         when(repository.findByUsernameStartsWithIgnoreCase("filter")).thenReturn(Collections.singletonList(mockUser));
-        BeanItemContainer<User> result = presenter.listUsers("filter");
+        BeanItemContainer<User> result = presenter.listEntities("filter");
         assertEquals(result.size(), 1);
         assertEquals(result.getIdByIndex(0), mockUser);
     }

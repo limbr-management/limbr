@@ -24,6 +24,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import management.limbr.data.model.BaseEntity;
+import management.limbr.data.model.ListColumn;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
@@ -35,9 +36,11 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
     private transient Collection<EntityListView.Listener<T>> listeners;
     private transient I18N messages;
     private Grid grid;
+    private Class<T> entityClass;
 
     @Autowired
-    public EntityListViewImpl(Collection<EntityListView.Listener<T>> listeners, I18N messages) {
+    public EntityListViewImpl(Class<T> entityClass, Collection<EntityListView.Listener<T>> listeners, I18N messages) {
+        this.entityClass = entityClass;
         this.listeners = listeners;
         this.messages = messages;
     }
@@ -53,7 +56,14 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
         HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
         actions.setSpacing(true);
         grid.removeAllColumns();
-        grid.addColumn("name");
+
+        java.lang.reflect.Field[] fields = entityClass.getDeclaredFields();
+        for (java.lang.reflect.Field field : fields) {
+            if (null != field.getAnnotation(ListColumn.class)) {
+                grid.addColumn(field.getName());
+            }
+        }
+
 
         grid.addItemClickListener(event -> {
             if (event.isDoubleClick()) {
@@ -65,6 +75,8 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
 
         addComponent(actions);
         addComponent(grid);
+
+        refresh();
     }
 
     @Override
