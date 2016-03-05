@@ -30,8 +30,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window implements EntityEditorView {
-    private transient Collection<EntityEditorView.Listener> listeners;
+public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window implements EntityEditorView<T> {
+    private transient Collection<EntityEditorView.Listener<T>> listeners;
     private transient I18N messages;
 
     private Class<T> entityClass;
@@ -39,10 +39,10 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
     private Map<String, Field> fieldMap = new HashMap<>();
 
     private Button save;
-    private Button cancel;
+    private Button delete;
 
     @Autowired
-    public EntityEditorViewImpl(Class<T> entityClass, Collection<EntityEditorView.Listener> listeners, I18N messages) {
+    public EntityEditorViewImpl(Class<T> entityClass, Collection<EntityEditorView.Listener<T>> listeners, I18N messages) {
         this.entityClass = entityClass;
         this.listeners = listeners;
         this.messages = messages;
@@ -53,14 +53,17 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
         VerticalLayout content = new VerticalLayout();
 
         for (java.lang.reflect.Field field : entityClass.getDeclaredFields()) {
+            if ("id".equals(field.getName())) {
+                continue;
+            }
             Field uiField = new TextField(messages.get(field.getName() + "FieldLabel"));
             fieldMap.put(field.getName(), uiField);
             content.addComponent(uiField);
         }
 
         save = new Button(messages.get("saveButtonLabel"), FontAwesome.SAVE);
-        cancel = new Button(messages.get("cancelButtonLabel"));
-        Button delete = new Button(messages.get("deleteButtonLabel"), FontAwesome.TRASH_O);
+        Button cancel = new Button(messages.get("cancelButtonLabel"));
+        delete = new Button(messages.get("deleteButtonLabel"), FontAwesome.TRASH_O);
 
         CssLayout actions = new CssLayout(save, cancel, delete);
         content.addComponent(actions);
@@ -70,8 +73,6 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
         setClosable(true);
         setResizable(false);
         setModal(true);
-
-        listeners.forEach(listener -> listener.viewInitialized(this));
 
         save.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::save));
         delete.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::delete));
@@ -98,8 +99,8 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
     }
 
     @Override
-    public void setCancelVisible(boolean visible) {
-        cancel.setVisible(visible);
+    public void setDeleteVisible(boolean visible) {
+        delete.setVisible(visible);
     }
 
     @Override

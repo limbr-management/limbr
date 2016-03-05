@@ -33,6 +33,10 @@ import java.util.Arrays;
 public abstract class BaseEntity implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(BaseEntity.class);
 
+    public abstract Long getId();
+
+    public abstract void setId(Long id);
+
     /**
      * Gets a textual representation of a POJO.
      *

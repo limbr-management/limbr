@@ -24,6 +24,7 @@ import com.vaadin.ui.UI;
 import management.limbr.data.ProjectRepository;
 import management.limbr.data.model.Project;
 import management.limbr.ui.VaadinUI;
+import management.limbr.ui.projecteditor.ProjectEditorPresenter;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -37,6 +38,7 @@ import static org.testng.Assert.assertEquals;
 public class ProjectsPresenterTest {
     private ProjectRepository repository;
     private ProjectsPresenter presenter;
+    private ProjectEditorPresenter editor;
 
     @BeforeMethod
     public void beforeMethod() {
@@ -44,8 +46,9 @@ public class ProjectsPresenterTest {
         UI.setCurrent(ui);
         ProjectsView view = mock(ProjectsView.class);
         repository = mock(ProjectRepository.class);
+        editor = mock(ProjectEditorPresenter.class);
 
-        presenter = new ProjectsPresenter(repository);
+        presenter = new ProjectsPresenter(repository, editor);
         presenter.viewInitialized(view);
     }
 

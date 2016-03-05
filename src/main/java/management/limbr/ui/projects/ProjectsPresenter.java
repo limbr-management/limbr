@@ -20,24 +20,35 @@
 package management.limbr.ui.projects;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.ProjectRepository;
 import management.limbr.data.model.Project;
 import management.limbr.ui.Presenter;
+import management.limbr.ui.entity.EntityEditorPresenter;
 import management.limbr.ui.entity.EntityListView;
+import management.limbr.ui.projecteditor.ProjectEditorPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 
 @Presenter
-public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serializable {
+public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serializable, EntityEditorPresenter.EntityChangeHandler {
     private transient ProjectRepository repository;
     private transient EntityListView view;
+    private transient ProjectEditorPresenter editor;
 
     @Autowired
-    public ProjectsPresenter(ProjectRepository repository) {
+    public ProjectsPresenter(ProjectRepository repository, ProjectEditorPresenter editor) {
         this.repository = repository;
+        this.editor = editor;
+    }
+
+    @PostConstruct
+    public void init() {
+        editor.setEntityChangeHandler(this);
     }
 
     @Override
@@ -55,12 +66,22 @@ public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serial
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void itemDoubleClicked(Item project) {
-        // not implemented
+        if (project == null || !(project instanceof BeanItem)) {
+            editor.hide();
+        } else {
+            editor.edit(((BeanItem<Project>)project).getBean());
+        }
     }
 
     @Override
     public void addNewClicked() {
-        // not implemented
+        editor.edit(new Project());
+    }
+
+    @Override
+    public void onEntityChanged() {
+        view.refresh();
     }
 }

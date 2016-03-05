@@ -17,22 +17,23 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.entity;
+package management.limbr.ui.projecteditor;
 
-import management.limbr.data.model.BaseEntity;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
+import management.limbr.data.model.Project;
+import management.limbr.ui.entity.EntityEditorView;
+import management.limbr.ui.entity.EntityEditorViewImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
-public interface EntityEditorView<T> {
-    <U> void setFieldValue(String name, U value);
-    <U> U getFieldValue(Class<U> valueClass, String name);
+import java.util.Collection;
 
-    void setDeleteVisible(boolean visible);
-
-    void show();
-    void hide();
-
-    interface Listener<T extends BaseEntity> {
-        void save();
-        void delete();
-        void cancel();
+@SpringComponent
+@UIScope
+public class ProjectEditorViewImpl extends EntityEditorViewImpl<Project> {
+    @Autowired
+    public ProjectEditorViewImpl(Collection<EntityEditorView.Listener<Project>> listeners, I18N messages) {
+        super(Project.class, listeners, messages);
     }
 }

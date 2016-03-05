@@ -17,22 +17,24 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.entity;
+package management.limbr.ui.projecteditor;
 
-import management.limbr.data.model.BaseEntity;
+import management.limbr.data.model.Project;
+import management.limbr.ui.Presenter;
+import management.limbr.ui.entity.EntityEditorPresenter;
+import management.limbr.ui.entity.EntityEditorView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EntityEditorView<T> {
-    <U> void setFieldValue(String name, U value);
-    <U> U getFieldValue(Class<U> valueClass, String name);
+@Presenter
+public class ProjectEditorPresenter extends EntityEditorPresenter<Project> {
+    @Autowired
+    public ProjectEditorPresenter(JpaRepository<Project, Long> repository) {
+        super(repository);
+    }
 
-    void setDeleteVisible(boolean visible);
-
-    void show();
-    void hide();
-
-    interface Listener<T extends BaseEntity> {
-        void save();
-        void delete();
-        void cancel();
+    @Override
+    protected Class<? extends EntityEditorView<Project>> getViewBeanClass() {
+        return ProjectEditorViewImpl.class;
     }
 }

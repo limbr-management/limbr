@@ -31,12 +31,22 @@ public class BaseEntityTest {
             public boolean isTheAnswer() { return true; }
             public boolean hasALife() { return false; }
             public Object getTheNull() { return null; }
-        };
+
+            @Override
+            public Long getId() {
+                return 1L;
+            }
+
+            @Override
+            public void setId(Long id) {
+                // nothing
+            }
+        }
 
         BaseEntity entity = new TestEntity();
 
         assertEquals(
-                "{class:\"" + TestEntity.class.getTypeName() + "\",aLife:false,something:\"aString\",theAnswer:true,theNull:null}",
-                entity.toString());
+                entity.toString(),
+                "{class:\"" + TestEntity.class.getTypeName() + "\",aLife:false,id:1,something:\"aString\",theAnswer:true,theNull:null}");
     }
 }

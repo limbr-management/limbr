@@ -64,7 +64,6 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
             }
         }
 
-
         grid.addItemClickListener(event -> {
             if (event.isDoubleClick()) {
                 listeners.forEach(listener -> listener.itemDoubleClicked(event.getItem()));
@@ -75,6 +74,8 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
 
         addComponent(actions);
         addComponent(grid);
+
+        listeners.forEach(listener -> listener.viewInitialized(this));
 
         refresh();
     }
