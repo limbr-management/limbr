@@ -17,13 +17,19 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.data;
+package management.limbr.ui.projects;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.model.Project;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface ProjectsView {
+    void refresh();
 
-public interface ProjectRepository extends JpaRepository<Project, Long> {
-    List<Project> findByNameStartsWithIgnoreCase(String name);
+    interface ProjectsViewListener {
+        BeanItemContainer<Project> listProjects(String filter);
+        void viewInitialized(ProjectsView view);
+        void itemDoubleClicked(Item project);
+        void addNewClicked();
+    }
 }

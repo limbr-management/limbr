@@ -29,6 +29,7 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import management.limbr.ui.error.ErrorView;
+import management.limbr.ui.projects.ProjectsViewImpl;
 import management.limbr.ui.users.UsersViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
@@ -67,6 +68,7 @@ public class VaadinUI extends UI {
         CssLayout navBar = new CssLayout();
         navBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         navBar.addComponent(createNavButton(messages.get("usersNavigationLabel"), UsersViewImpl.VIEW_NAME));
+        navBar.addComponent(createNavButton(messages.get("projectsNavigationLabel"), ProjectsViewImpl.VIEW_NAME));
         topBar.addComponent(navBar);
 
         root.addComponent(topBar);
