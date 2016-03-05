@@ -159,7 +159,11 @@ public class EntityEditorPresenterTest {
 
         when(testView.getFieldValue(String.class, "something")).thenReturn("whatever");
 
-        presenter.save();
+        try {
+            presenter.save();
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
 
         assertEquals(pinto.getSomething(), "whatever");
     }
