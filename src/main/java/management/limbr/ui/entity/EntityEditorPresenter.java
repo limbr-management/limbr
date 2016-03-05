@@ -49,7 +49,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
     protected abstract Class<? extends EntityEditorView<T>> getViewBeanClass();
 
     public void hide() {
-        view.hide();
+        getView().hide();
     }
 
     public void edit(T entity) {
@@ -80,10 +80,10 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
     @Override
     public void save() {
         for (java.lang.reflect.Field field : entity.getClass().getDeclaredFields()) {
-            if ("id".equals(field.getName())) {
+            if ("id".equals(field.getName()) || "this$0".equals(field.getName())) {
                 continue;
             }
-            callSetter(entity, field.getName(), getView().getFieldValue(field.getDeclaringClass(), field.getName()));
+            callSetter(entity, field.getName(), getView().getFieldValue(field.getType(), field.getName()));
         }
 
         repository.save(entity);
@@ -110,7 +110,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
 
     @Override
     public void cancel() {
-        view.hide();
+        getView().hide();
     }
 
     @FunctionalInterface

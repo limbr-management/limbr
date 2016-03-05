@@ -19,6 +19,7 @@
 
 package management.limbr.ui.projects;
 
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.UI;
 import management.limbr.data.ProjectRepository;
@@ -30,8 +31,8 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
 @Test
@@ -39,12 +40,13 @@ public class ProjectsPresenterTest {
     private ProjectRepository repository;
     private ProjectsPresenter presenter;
     private ProjectEditorPresenter editor;
+    private ProjectsView view;
 
     @BeforeMethod
     public void beforeMethod() {
         VaadinUI ui = mock(VaadinUI.class);
         UI.setCurrent(ui);
-        ProjectsView view = mock(ProjectsView.class);
+        view = mock(ProjectsView.class);
         repository = mock(ProjectRepository.class);
         editor = mock(ProjectEditorPresenter.class);
 
@@ -66,5 +68,31 @@ public class ProjectsPresenterTest {
         BeanItemContainer<Project> result = presenter.listEntities("filter");
         assertEquals(result.size(), 1);
         assertEquals(result.getIdByIndex(0), mockProject);
+    }
+
+    public void showsEditorWhenDoubleClicked() {
+        BeanItem<Project> item = new BeanItem<>(mock(Project.class));
+
+        presenter.itemDoubleClicked(item);
+
+        verify(editor).edit(item.getBean());
+    }
+
+    public void hidesEditorWhenNothingClicked() {
+        presenter.itemDoubleClicked(null);
+
+        verify(editor).hide();
+    }
+
+    public void createsNewProject() {
+        presenter.addNewClicked();
+
+        verify(editor).edit(any(Project.class));
+    }
+
+    public void refreshesOnChange() {
+        presenter.onEntityChanged();
+
+        verify(view).refresh();
     }
 }
