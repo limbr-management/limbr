@@ -20,6 +20,8 @@
 package management.limbr.ui.entity;
 
 import management.limbr.data.model.BaseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -35,6 +37,8 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
     private transient EntityEditorView<T> view;
     private EntityChangeHandler entityChangeHandler;
     private ApplicationContext applicationContext;
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntityEditorPresenter.class);
 
     @Autowired
     public EntityEditorPresenter(JpaRepository<T, Long> repository) {
@@ -152,6 +156,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
     private <U> void callSetter(T entity, String name, U value) {
         Method setter;
         try {
+            LOG.debug("Looking for setter for " + name + " in entity " + entity + " with value " + value);
             setter = entity.getClass().getDeclaredMethod("set" + name.substring(0, 1).toUpperCase() + name.substring(1), value.getClass());
         } catch (NoSuchMethodException ex) {
             return;
