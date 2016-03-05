@@ -52,7 +52,7 @@ public class ProjectsPresenterTest {
     public void listsProjectsEmptyFilter() {
         Project mockProject = mock(Project.class);
         when(repository.findAll()).thenReturn(Collections.singletonList(mockProject));
-        BeanItemContainer<Project> result = presenter.listProjects("");
+        BeanItemContainer<Project> result = presenter.listEntities("");
         assertEquals(result.size(), 1);
         assertEquals(result.getIdByIndex(0), mockProject);
     }
@@ -60,7 +60,7 @@ public class ProjectsPresenterTest {
     public void listsProjectsWithFilter() {
         Project mockProject = mock(Project.class);
         when(repository.findByNameStartsWithIgnoreCase("filter")).thenReturn(Collections.singletonList(mockProject));
-        BeanItemContainer<Project> result = presenter.listProjects("filter");
+        BeanItemContainer<Project> result = presenter.listEntities("filter");
         assertEquals(result.size(), 1);
         assertEquals(result.getIdByIndex(0), mockProject);
     }

@@ -19,74 +19,26 @@
 
 package management.limbr.ui.projects;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
+import management.limbr.data.model.Project;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
+import management.limbr.ui.entity.EntityListView;
+import management.limbr.ui.entity.EntityListViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
 
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 
 @RequiresPrivilege(level = PrivilegeLevels.ADMIN)
 @UIScope
 @SpringView(name = ProjectsViewImpl.VIEW_NAME)
-public class ProjectsViewImpl extends VerticalLayout implements View, ProjectsView {
+public class ProjectsViewImpl extends EntityListViewImpl<Project> {
     public static final String VIEW_NAME = "projects";
 
-    private transient Collection<ProjectsViewListener> listeners;
-
-    private transient I18N messages;
-
-    private Grid grid;
-
     @Autowired
-    public ProjectsViewImpl(Collection<ProjectsViewListener> listeners, I18N messages) {
-        this.listeners = listeners;
-        this.messages = messages;
-    }
-
-    @PostConstruct
-    public void init() {
-        grid = new Grid();
-        TextField filter = new TextField();
-        filter.setInputPrompt(messages.get("filterByProjectNameLabel"));
-        filter.addTextChangeListener(event -> listProjects(event.getText()));
-
-        Button addNewButton = new Button(messages.get("newProjectButtonLabel"), FontAwesome.PLUS);
-        HorizontalLayout actions = new HorizontalLayout(filter, addNewButton);
-        actions.setSpacing(true);
-        grid.removeAllColumns();
-        grid.addColumn("name");
-
-        grid.addItemClickListener(event -> {
-            if (event.isDoubleClick()) {
-                listeners.forEach(listener -> listener.itemDoubleClicked(event.getItem()));
-            }
-        });
-
-        addNewButton.addClickListener(event -> listeners.forEach(ProjectsViewListener::addNewClicked));
-
-        addComponent(actions);
-        addComponent(grid);
-    }
-
-    @Override
-    public void refresh() {
-        listProjects(null);
-    }
-
-    private void listProjects(String filter) {
-        listeners.forEach(listener -> grid.setContainerDataSource(listener.listProjects(filter)));
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        // nothing needed here
+    public ProjectsViewImpl(Collection<EntityListView.Listener<Project>> listeners, I18N messages) {
+        super(listeners, messages);
     }
 }

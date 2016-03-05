@@ -24,15 +24,16 @@ import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.ProjectRepository;
 import management.limbr.data.model.Project;
 import management.limbr.ui.Presenter;
+import management.limbr.ui.entity.EntityListView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
 @Presenter
-public class ProjectsPresenter implements ProjectsView.ProjectsViewListener, Serializable {
+public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serializable {
     private transient ProjectRepository repository;
-    private transient ProjectsView view;
+    private transient EntityListView<Project> view;
 
     @Autowired
     public ProjectsPresenter(ProjectRepository repository) {
@@ -40,7 +41,7 @@ public class ProjectsPresenter implements ProjectsView.ProjectsViewListener, Ser
     }
 
     @Override
-    public BeanItemContainer<Project> listProjects(String filter) {
+    public BeanItemContainer<Project> listEntities(String filter) {
         if (StringUtils.isEmpty(filter)) {
             return new BeanItemContainer<>(Project.class, repository.findAll());
         } else {
@@ -49,7 +50,7 @@ public class ProjectsPresenter implements ProjectsView.ProjectsViewListener, Ser
     }
 
     @Override
-    public void viewInitialized(ProjectsView view) {
+    public void viewInitialized(EntityListView<Project> view) {
         this.view = view;
     }
 

@@ -17,10 +17,19 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.ui.projects;
+package management.limbr.ui.entity;
 
-import management.limbr.data.model.Project;
-import management.limbr.ui.entity.EntityListView;
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItemContainer;
+import management.limbr.data.model.BaseEntity;
 
-public interface ProjectsView extends EntityListView<Project> {
+public interface EntityListView<T extends BaseEntity> {
+    void refresh();
+
+    interface Listener<T extends BaseEntity> {
+        BeanItemContainer<T> listEntities(String filter);
+        void viewInitialized(EntityListView<T> view);
+        void itemDoubleClicked(Item item);
+        void addNewClicked();
+    }
 }
