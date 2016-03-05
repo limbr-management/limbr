@@ -36,6 +36,11 @@ public class EntityEditorPresenterTest {
         private String something;
 
         @Override
+        public String toString() {
+            return (id == null ? "" : (id.toString() + ":")) + something;
+        }
+
+        @Override
         public Long getId() {
             return id;
         }
