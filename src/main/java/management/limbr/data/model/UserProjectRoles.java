@@ -39,10 +39,12 @@ public class UserProjectRoles extends BaseEntity {
     @ManyToMany
     private Set<Role> roles;
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
