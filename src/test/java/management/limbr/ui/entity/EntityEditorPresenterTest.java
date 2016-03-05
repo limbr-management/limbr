@@ -150,7 +150,12 @@ public class EntityEditorPresenterTest {
 
     public void savesEntity() {
         TestBean pinto = new TestBean();
-        ReflectionTestUtils.setField(presenter, "entity", pinto);
+        pinto.setId(42L);
+        pinto.setSomething("whatever");
+
+        when(repository.findOne(42L)).thenReturn(pinto);
+
+        presenter.edit(pinto);
 
         when(testView.getFieldValue(String.class, "something")).thenReturn("whatever");
 
