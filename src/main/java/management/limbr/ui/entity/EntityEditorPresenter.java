@@ -68,7 +68,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         getView().setDeleteVisible(persisted);
 
         for (java.lang.reflect.Field field : entity.getClass().getDeclaredFields()) {
-            if ("id".equals(field.getName())) {
+            if ("id".equals(field.getName()) || field.getName().contains("$")) {
                 continue;
             }
             Object value = callGetter(entity, field.getName());
@@ -84,7 +84,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
     @Override
     public void save() {
         for (java.lang.reflect.Field field : entity.getClass().getDeclaredFields()) {
-            if ("id".equals(field.getName()) || "this$0".equals(field.getName())) {
+            if ("id".equals(field.getName()) || field.getName().contains("$")) {
                 continue;
             }
             callSetter(entity, field.getName(), getView().getFieldValue(field.getType(), field.getName()));
