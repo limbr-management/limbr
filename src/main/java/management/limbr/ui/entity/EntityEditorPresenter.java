@@ -186,7 +186,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         try {
             return getter.invoke(entity);
         } catch (IllegalAccessException | InvocationTargetException ex) {
-            LOG.debug("Couldn't execute getter: " + getter);
+            LOG.debug("Couldn't execute getter: " + getter, ex);
             return entity;
         }
     }
@@ -204,7 +204,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         try {
             setter.invoke(entity, value);
         } catch (IllegalAccessException | InvocationTargetException ex) {
-            LOG.debug("Couldn't execute setter: " + setter);
+            LOG.debug("Couldn't execute setter: " + setter, ex);
         }
     }
 }
