@@ -127,6 +127,7 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
     }
 
     @Override
+    @SuppressWarnings({"squid:S1067"}) // too many conditional operators
     public boolean equals(Object obj) {
         if (obj instanceof EntityEditorViewImpl) {
             EntityEditorViewImpl view = (EntityEditorViewImpl)obj;
