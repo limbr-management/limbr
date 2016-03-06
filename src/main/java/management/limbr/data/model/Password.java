@@ -17,16 +17,15 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.data.model.util;
+package management.limbr.data.model;
 
-import org.testng.annotations.Test;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import static org.testng.Assert.*;
-
-@Test
-public class UserUtilTest {
-    public void saltsAndHashesPassword() {
-        UserUtil userUtil = new UserUtil();
-        assertEquals(userUtil.generatePasswordHash("admin", "admin"), "e9bb0f231e2f35658dda443345a46f5d");
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Password {
+    String saltWith();
 }

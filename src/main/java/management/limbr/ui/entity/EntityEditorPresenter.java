@@ -20,6 +20,8 @@
 package management.limbr.ui.entity;
 
 import management.limbr.data.model.BaseEntity;
+import management.limbr.data.model.Password;
+import management.limbr.data.model.util.EntityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +30,25 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class EntityEditorPresenter<T extends BaseEntity> implements EntityEditorView.Listener, Serializable, ApplicationContextAware {
+    public static final String DEFAULT_VALUE = " | | | | | ";
     private transient JpaRepository<T, Long> repository;
     private T entity;
     private transient EntityEditorView<T> view;
     private transient EntityChangeHandler entityChangeHandler;
     private transient ApplicationContext applicationContext;
+    private transient EntityUtil entityUtil;
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityEditorPresenter.class);
 
     @Autowired
-    public EntityEditorPresenter(JpaRepository<T, Long> repository) {
+    public EntityEditorPresenter(JpaRepository<T, Long> repository, EntityUtil entityUtil) {
         this.repository = repository;
+        this.entityUtil = entityUtil;
     }
 
     @Override
@@ -71,7 +77,14 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
             if ("id".equals(field.getName()) || field.getName().contains("$")) {
                 continue;
             }
-            Object value = callGetter(entity, field.getName());
+            Object value;
+
+            Password passwordAnnotation = field.getAnnotation(Password.class);
+            if (passwordAnnotation != null) {
+                value = DEFAULT_VALUE;
+            } else {
+                value = callGetter(entity, field.getName());
+            }
             if (value == null && field.getType().equals(String.class)) {
                 value = "";
             }
@@ -87,7 +100,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
             if ("id".equals(field.getName()) || field.getName().contains("$")) {
                 continue;
             }
-            callSetter(entity, field.getName(), getView().getFieldValue(field.getType(), field.getName()));
+            commitFieldValue(field);
         }
 
         repository.save(entity);
@@ -97,6 +110,28 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         }
 
         getView().hide();
+    }
+
+    private void commitFieldValue(Field field) {
+        Password passwordAnnotation = field.getAnnotation(Password.class);
+        if (passwordAnnotation != null) {
+            String value = getView().getFieldValue(String.class, field.getName());
+            if (!DEFAULT_VALUE.equals(value)) {
+                try {
+                    Field saltField = entity.getClass().getField(passwordAnnotation.saltWith());
+
+                    Object saltValue = getView().getFieldValue(saltField.getType(), saltField.getName());
+
+                    callSetter(entity, field.getName(), entityUtil.generatePasswordHash(saltValue.toString(), value));
+
+                } catch (NoSuchFieldException ex) {
+                    LOG.warn("Cannot find field " + passwordAnnotation.saltWith() + " to hash with password field "
+                            + field.getName() + " of " + entity.getClass().getName(), ex);
+                }
+            }
+        } else {
+            callSetter(entity, field.getName(), getView().getFieldValue(field.getType(), field.getName()));
+        }
     }
 
     @Override

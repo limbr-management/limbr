@@ -38,6 +38,7 @@ public class User extends BaseEntity {
     @ListColumn
     private String displayName;
 
+    @Password(saltWith = "username")
     private String passwordHash;
 
     @ListColumn

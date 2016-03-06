@@ -26,7 +26,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @SpringComponent
-public class UserUtil {
+public class EntityUtil {
     private static final String SALT = "The ocean is salty.";
 
     public String generatePasswordHash(String userid, String password) {

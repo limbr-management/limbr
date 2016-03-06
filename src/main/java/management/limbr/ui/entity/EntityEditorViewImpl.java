@@ -22,6 +22,7 @@ package management.limbr.ui.entity;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import management.limbr.data.model.BaseEntity;
+import management.limbr.data.model.Password;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.i18n.I18N;
@@ -57,7 +58,7 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
             if ("id".equals(field.getName())) {
                 continue;
             }
-            Field uiField = new TextField(messages.get(field.getName() + "FieldLabel"));
+            Field uiField = getUIField(field);
             fieldMap.put(field.getName(), uiField);
             content.addComponent(uiField);
         }
@@ -78,6 +79,15 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
         save.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::save));
         delete.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::delete));
         cancel.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::cancel));
+    }
+
+    private Field<String> getUIField(java.lang.reflect.Field field) {
+        String label = messages.get(field.getName() + "FieldLabel");
+        Password passwordAnnotation = field.getAnnotation(Password.class);
+        if (passwordAnnotation != null) {
+            return new PasswordField(label);
+        }
+        return new TextField(label);
     }
 
     @Override

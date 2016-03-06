@@ -21,7 +21,7 @@ package management.limbr;
 
 import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
-import management.limbr.data.model.util.UserUtil;
+import management.limbr.data.model.util.EntityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -52,9 +52,9 @@ public class LimbrApplication {
     @Bean
     public CommandLineRunner loadData(UserRepository repository) {
         return args -> {
-            UserUtil userUtil = new UserUtil();
-            repository.save(new User("admin", "Admin", userUtil.generatePasswordHash("admin", "admin"), "admin@limbr.management"));
-            repository.save(new User("bob", "Bob Builder", userUtil.generatePasswordHash("bob", "bob"), "bob@limbr.management"));
+            EntityUtil entityUtil = new EntityUtil();
+            repository.save(new User("admin", "Admin", entityUtil.generatePasswordHash("admin", "admin"), "admin@limbr.management"));
+            repository.save(new User("bob", "Bob Builder", entityUtil.generatePasswordHash("bob", "bob"), "bob@limbr.management"));
         };
     }
 

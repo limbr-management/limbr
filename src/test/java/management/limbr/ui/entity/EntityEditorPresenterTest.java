@@ -20,6 +20,9 @@
 package management.limbr.ui.entity;
 
 import management.limbr.data.model.BaseEntity;
+import management.limbr.data.model.Password;
+import management.limbr.data.model.util.EntityUtil;
+import org.mockito.ArgumentMatcher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -34,6 +37,9 @@ public class EntityEditorPresenterTest {
     class TestBean extends BaseEntity {
         private Long id;
         private String something;
+
+        @Password(saltWith = "id")
+        private String passwordHash;
 
         @Override
         public String toString() {
@@ -56,6 +62,14 @@ public class EntityEditorPresenterTest {
 
         public void setSomething(String something) {
             this.something = something;
+        }
+
+        public String getPasswordHash() {
+            return passwordHash;
+        }
+
+        public void setPasswordHash(String passwordHash) {
+            this.passwordHash = passwordHash;
         }
     }
 
@@ -89,8 +103,8 @@ public class EntityEditorPresenterTest {
 
     public class TestPresenter extends EntityEditorPresenter<TestBean> {
 
-        public TestPresenter(JpaRepository<TestBean, Long> repository) {
-            super(repository);
+        public TestPresenter(JpaRepository<TestBean, Long> repository, EntityUtil entityUtil) {
+            super(repository, entityUtil);
         }
 
         @Override
@@ -107,7 +121,7 @@ public class EntityEditorPresenterTest {
     public void beforeMethod() {
         repository = mock(JpaRepository.class);
 
-        presenter = new TestPresenter(repository);
+        presenter = new TestPresenter(repository, new EntityUtil());
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         testView = mock(TestView.class);
@@ -126,6 +140,7 @@ public class EntityEditorPresenterTest {
         TestBean pinto = new TestBean();
         pinto.setId(42L);
         pinto.setSomething("whatever");
+        pinto.setPasswordHash(new EntityUtil().generatePasswordHash("42", "password"));
 
         when(repository.findOne(42L)).thenReturn(pinto);
 
@@ -133,6 +148,12 @@ public class EntityEditorPresenterTest {
 
         verify(testView).setDeleteVisible(true);
         verify(testView).setFieldValue("something", "whatever");
+        verify(testView).setFieldValue(eq("passwordHash"), argThat(new ArgumentMatcher<String>() {
+            @Override
+            public boolean matches(Object o) {
+                return !pinto.getPasswordHash().equals(o);
+            }
+        }));
         verify(testView).show();
     }
 

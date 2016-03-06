@@ -20,6 +20,7 @@
 package management.limbr.ui.projecteditor;
 
 import management.limbr.data.model.Project;
+import management.limbr.data.model.util.EntityUtil;
 import management.limbr.ui.Presenter;
 import management.limbr.ui.entity.EntityEditorPresenter;
 import management.limbr.ui.entity.EntityEditorView;
@@ -29,8 +30,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Presenter
 public class ProjectEditorPresenter extends EntityEditorPresenter<Project> {
     @Autowired
-    public ProjectEditorPresenter(JpaRepository<Project, Long> repository) {
-        super(repository);
+    public ProjectEditorPresenter(JpaRepository<Project, Long> repository, EntityUtil entityUtil) {
+        super(repository, entityUtil);
     }
 
     @Override
