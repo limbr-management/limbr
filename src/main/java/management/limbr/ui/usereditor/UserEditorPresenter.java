@@ -19,110 +19,22 @@
 
 package management.limbr.ui.usereditor;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import management.limbr.data.UserRepository;
 import management.limbr.data.model.User;
-import management.limbr.data.model.util.UserUtil;
 import management.limbr.ui.Presenter;
+import management.limbr.ui.entity.EntityEditorPresenter;
+import management.limbr.ui.entity.EntityEditorView;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.Serializable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Presenter
-public class UserEditorPresenter implements UserEditorView.UserEditorViewListener, Serializable {
-    @SuppressWarnings("squid:S2068") // it's not a hard-coded password
-    public static final String PASSWORD_PLACEHOLDER = "$notPass$12345678";
-
-    private transient UserRepository repository;
-
-    private transient UserUtil userUtil;
-
-    private User user;
-
-    private transient UserEditorView view;
-
-    private transient UserChangeHandler userChangeHandler;
-
+public class UserEditorPresenter extends EntityEditorPresenter<User> {
     @Autowired
-    public UserEditorPresenter(UserRepository repository, UserUtil userUtil) {
-        this.repository = repository;
-        this.userUtil = userUtil;
-    }
-
-    public void hide() {
-        view.hide();
-    }
-
-    public void editUser(User u) {
-        final boolean persisted = u.getId() != null;
-
-        if (persisted) {
-            user = repository.findOne(u.getId());
-        } else {
-            user = u;
-        }
-
-        view.setCancelVisible(persisted);
-
-        BeanFieldGroup.bindFieldsUnbuffered(user, view);
-
-        view.setUsername(u.getUsername());
-        view.setPassword(PASSWORD_PLACEHOLDER);
-        view.setDisplayName(u.getDisplayName());
-        view.setEmailAddress(u.getEmailAddress());
-
-        view.show();
+    public UserEditorPresenter(JpaRepository<User, Long> repository) {
+        super(repository);
     }
 
     @Override
-    public void save() {
-        String username = view.getUsername();
-        user.setUsername(username);
-        String password = view.getPassword();
-        if (!PASSWORD_PLACEHOLDER.equals(password)) {
-            user.setPasswordHash(userUtil.generatePasswordHash(username, password));
-        }
-        user.setDisplayName(view.getDisplayName());
-        user.setEmailAddress(view.getEmailAddress());
-
-        repository.save(user);
-
-        if (userChangeHandler != null) {
-            userChangeHandler.onUserChanged();
-        }
-
-        view.hide();
-    }
-
-    @Override
-    public void delete() {
-        // TODO: ask if they're sure!
-
-        repository.delete(user);
-
-        if (userChangeHandler != null) {
-            userChangeHandler.onUserChanged();
-        }
-
-        view.hide();
-    }
-
-    @Override
-    public void cancel() {
-        view.hide();
-    }
-
-    @Override
-    public void viewInitialized(UserEditorView view) {
-        this.view = view;
-    }
-
-    @FunctionalInterface
-    public interface UserChangeHandler {
-        void onUserChanged();
-    }
-
-    public void setUserChangeHandler(UserChangeHandler userChangeHandler) {
-        this.userChangeHandler = userChangeHandler;
+    protected Class<? extends EntityEditorView<User>> getViewBeanClass() {
+        return UserEditorViewImpl.class;
     }
 }

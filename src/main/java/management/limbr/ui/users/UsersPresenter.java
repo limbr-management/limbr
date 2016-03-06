@@ -34,7 +34,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 
 @Presenter
-public class UsersPresenter implements EntityListView.Listener<User>, UserEditorPresenter.UserChangeHandler, Serializable {
+public class UsersPresenter implements EntityListView.Listener<User>, UserEditorPresenter.EntityChangeHandler, Serializable {
 
     private transient UserRepository repository;
 
@@ -50,7 +50,7 @@ public class UsersPresenter implements EntityListView.Listener<User>, UserEditor
 
     @PostConstruct
     public void init() {
-        editorPresenter.setUserChangeHandler(this);
+        editorPresenter.setEntityChangeHandler(this);
     }
 
     @Override
@@ -74,17 +74,17 @@ public class UsersPresenter implements EntityListView.Listener<User>, UserEditor
         if (user == null || !(user instanceof BeanItem)) {
             editorPresenter.hide();
         } else {
-            editorPresenter.editUser(((BeanItem<User>)user).getBean());
+            editorPresenter.edit(((BeanItem<User>)user).getBean());
         }
     }
 
     @Override
     public void addNewClicked() {
-        editorPresenter.editUser(new User("", "", "", ""));
+        editorPresenter.edit(new User("", "", "", ""));
     }
 
     @Override
-    public void onUserChanged() {
+    public void onEntityChanged() {
         editorPresenter.hide();
         view.refresh();
     }

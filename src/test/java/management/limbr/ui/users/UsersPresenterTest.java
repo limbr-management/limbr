@@ -54,7 +54,7 @@ public class UsersPresenterTest {
         presenter.viewInitialized(view);
         presenter.init();
 
-        verify(userEditorPresenter).setUserChangeHandler(presenter);
+        verify(userEditorPresenter).setEntityChangeHandler(presenter);
     }
 
     public void listsUsersEmptyFilter() {
@@ -79,12 +79,12 @@ public class UsersPresenterTest {
 
         presenter.itemDoubleClicked(item);
 
-        verify(userEditorPresenter).editUser(mockUser);
+        verify(userEditorPresenter).edit(mockUser);
     }
 
     public void showsEditorWhenAddNewClicked() {
         presenter.addNewClicked();
 
-        verify(userEditorPresenter).editUser(any(User.class));
+        verify(userEditorPresenter).edit(any(User.class));
     }
 }
