@@ -31,8 +31,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public abstract class EntityEditorPresenter<T extends BaseEntity> implements EntityEditorView.Listener, Serializable, ApplicationContextAware {
     public static final String DEFAULT_VALUE = " | | | | | ";
@@ -83,7 +81,7 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
             if (passwordAnnotation != null) {
                 value = DEFAULT_VALUE;
             } else {
-                value = callGetter(entity, field.getName());
+                value = entityUtil.callGetter(entity, field.getName());
             }
             if (value == null && field.getType().equals(String.class)) {
                 value = "";
@@ -118,11 +116,11 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
             String value = getView().getFieldValue(String.class, field.getName());
             if (!DEFAULT_VALUE.equals(value)) {
                 try {
-                    Field saltField = entity.getClass().getField(passwordAnnotation.saltWith());
+                    Field saltField = entity.getClass().getDeclaredField(passwordAnnotation.saltWith());
 
                     Object saltValue = getView().getFieldValue(saltField.getType(), saltField.getName());
 
-                    callSetter(entity, field.getName(), entityUtil.generatePasswordHash(saltValue.toString(), value));
+                    entityUtil.callSetter(entity, field.getName(), entityUtil.generatePasswordHash(saltValue.toString(), value));
 
                 } catch (NoSuchFieldException ex) {
                     LOG.warn("Cannot find field " + passwordAnnotation.saltWith() + " to hash with password field "
@@ -130,14 +128,17 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
                 }
             }
         } else {
-            callSetter(entity, field.getName(), getView().getFieldValue(field.getType(), field.getName()));
+            entityUtil.callSetter(entity, field.getName(), getView().getFieldValue(field.getType(), field.getName()));
         }
     }
 
     @Override
-    public void delete() {
-        // TODO: ask if they're sure
+    public void deleteClicked() {
+        getView().confirmDelete(entity);
+    }
 
+    @Override
+    public void deleteConfirmed() {
         repository.delete(entity);
 
         if (entityChangeHandler != null) {
@@ -169,42 +170,4 @@ public abstract class EntityEditorPresenter<T extends BaseEntity> implements Ent
         return view;
     }
 
-    private Object callGetter(T entity, String name) {
-        Method getter;
-        try {
-            getter = entity.getClass().getDeclaredMethod("get" + name.substring(0, 1).toUpperCase() + name.substring(1));
-        } catch (NoSuchMethodException ex1) {
-            LOG.debug("Didn't find getter starting with \"get\" for " + name + " in " + entity.getClass().getName(), ex1);
-            try {
-                getter = entity.getClass().getDeclaredMethod("is" + name.substring(0, 1).toUpperCase() + name.substring(1));
-            } catch (NoSuchMethodException ex2) {
-                LOG.debug("Didn't find getter for " + name + " in " + entity.getClass().getName(), ex2);
-                return null;
-            }
-        }
-
-        try {
-            return getter.invoke(entity);
-        } catch (IllegalAccessException | InvocationTargetException ex) {
-            LOG.debug("Couldn't execute getter: " + getter, ex);
-            return entity;
-        }
-    }
-
-    private <U> void callSetter(T entity, String name, U value) {
-        Method setter;
-        try {
-            LOG.debug("Looking for setter for " + name + " in entity " + entity + " with value " + value);
-            setter = entity.getClass().getDeclaredMethod("set" + name.substring(0, 1).toUpperCase() + name.substring(1), value.getClass());
-        } catch (NoSuchMethodException ex) {
-            LOG.debug("Didn't find setter for " + name + " in " + entity.getClass().getName(), ex);
-            return;
-        }
-
-        try {
-            setter.invoke(entity, value);
-        } catch (IllegalAccessException | InvocationTargetException ex) {
-            LOG.debug("Couldn't execute setter: " + setter, ex);
-        }
-    }
 }

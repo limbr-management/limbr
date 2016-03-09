@@ -17,28 +17,25 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.data.model;
+package management.limbr.ui.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import management.limbr.data.model.BaseEntity;
+import management.limbr.data.model.Password;
 
-@Entity
-@SuppressWarnings({"common-java:DuplicatedBlocks"})
-public class Project extends BaseEntity {
-
-    @Id
-    @GeneratedValue
+/**
+ * Used by EntityEditorPresenterTest (and maybe others eventually)
+ */
+public class TestBean extends BaseEntity {
     private Long id;
+    private String something;
 
-    @Column(unique = true)
-    @ListColumn
-    @DisplayName
-    private String name;
+    @Password(saltWith = "something")
+    private String passwordHash;
 
-    @Column(unique = true)
-    private String shortName;
+    @Override
+    public String toString() {
+        return (id == null ? "" : (id.toString() + ":")) + something;
+    }
 
     @Override
     public Long getId() {
@@ -50,19 +47,19 @@ public class Project extends BaseEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getSomething() {
+        return something;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSomething(String something) {
+        this.something = something;
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }

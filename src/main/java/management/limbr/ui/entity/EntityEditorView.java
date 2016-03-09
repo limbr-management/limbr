@@ -28,13 +28,16 @@ public interface EntityEditorView<T> {
 
     void setDeleteVisible(boolean visible);
 
+    void confirmDelete(T entity);
+
     void show();
     void hide();
 
     @SuppressWarnings("squid:S2326") // Type parameter is used to identify different views for a collection from Spring
     interface Listener<T extends BaseEntity> {
         void save();
-        void delete();
+        void deleteClicked();
+        void deleteConfirmed();
         void cancel();
     }
 }

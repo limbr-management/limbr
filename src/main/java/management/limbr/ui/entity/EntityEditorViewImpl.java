@@ -23,8 +23,10 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import management.limbr.data.model.BaseEntity;
 import management.limbr.data.model.Password;
+import management.limbr.data.model.util.EntityUtil;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.i18n.I18N;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +37,7 @@ import java.util.Map;
 public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window implements EntityEditorView<T> {
     private transient Collection<EntityEditorView.Listener<T>> listeners;
     private transient I18N messages;
+    private transient EntityUtil entityUtil;
 
     private Class<T> entityClass;
 
@@ -44,10 +47,11 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
     private Button delete;
 
     @Autowired
-    public EntityEditorViewImpl(Class<T> entityClass, Collection<EntityEditorView.Listener<T>> listeners, I18N messages) {
+    public EntityEditorViewImpl(Class<T> entityClass, Collection<EntityEditorView.Listener<T>> listeners, I18N messages, EntityUtil entityUtil) {
         this.entityClass = entityClass;
         this.listeners = listeners;
         this.messages = messages;
+        this.entityUtil = entityUtil;
     }
 
     @PostConstruct
@@ -77,7 +81,7 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
         setModal(true);
 
         save.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::save));
-        delete.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::delete));
+        delete.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::deleteClicked));
         cancel.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::cancel));
     }
 
@@ -124,6 +128,16 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
     @Override
     public void hide() {
         close();
+    }
+
+    @Override
+    public void confirmDelete(T entity) {
+        ConfirmDialog.show(UI.getCurrent(), "Delete", "Are you sure you want to delete " + entityUtil.getDisplayName(entity) + "?", "OK", "Cancel",
+                dialog -> {
+                    if (dialog.isConfirmed()) {
+                        listeners.forEach(EntityEditorView.Listener::deleteConfirmed);
+                    }
+                });
     }
 
     @Override

@@ -19,45 +19,15 @@
 
 package management.limbr.data.model;
 
-import javax.persistence.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Entity
-@SuppressWarnings({"common-java:DuplicatedBlocks"})
-public class Role extends BaseEntity {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @DisplayName
-    private String name;
-
-    @Enumerated(EnumType.STRING)
-    private RoleTypes type;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public RoleTypes getType() {
-        return type;
-    }
-
-    public void setType(RoleTypes type) {
-        this.type = type;
-    }
+/**
+ * Specifies the field which will be displayed in the UI for an object when no specific fields are provided.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface DisplayName {
 }

@@ -33,6 +33,7 @@ public class User extends BaseEntity {
 
     @Column(unique = true)
     @ListColumn
+    @DisplayName
     private String username;
 
     @ListColumn

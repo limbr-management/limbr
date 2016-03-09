@@ -19,8 +19,6 @@
 
 package management.limbr.ui.entity;
 
-import management.limbr.data.model.BaseEntity;
-import management.limbr.data.model.Password;
 import management.limbr.data.model.util.EntityUtil;
 import org.mockito.ArgumentMatcher;
 import org.springframework.context.ApplicationContext;
@@ -34,44 +32,6 @@ import static org.testng.Assert.assertEquals;
 
 @Test
 public class EntityEditorPresenterTest {
-    class TestBean extends BaseEntity {
-        private Long id;
-        private String something;
-
-        @Password(saltWith = "id")
-        private String passwordHash;
-
-        @Override
-        public String toString() {
-            return (id == null ? "" : (id.toString() + ":")) + something;
-        }
-
-        @Override
-        public Long getId() {
-            return id;
-        }
-
-        @Override
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getSomething() {
-            return something;
-        }
-
-        public void setSomething(String something) {
-            this.something = something;
-        }
-
-        public String getPasswordHash() {
-            return passwordHash;
-        }
-
-        public void setPasswordHash(String passwordHash) {
-            this.passwordHash = passwordHash;
-        }
-    }
 
     class TestView implements EntityEditorView<TestBean> {
 
@@ -99,6 +59,11 @@ public class EntityEditorPresenterTest {
         public void hide() {
 
         }
+
+        @Override
+        public void confirmDelete(TestBean entity) {
+
+        }
     }
 
     public class TestPresenter extends EntityEditorPresenter<TestBean> {
@@ -118,6 +83,7 @@ public class EntityEditorPresenterTest {
     private TestView testView;
 
     @BeforeMethod
+    @SuppressWarnings({"unchecked"})
     public void beforeMethod() {
         repository = mock(JpaRepository.class);
 
@@ -136,7 +102,7 @@ public class EntityEditorPresenterTest {
         verify(testView).hide();
     }
 
-    public void editsExistingEntity() {
+    public void editsExistingEntity() throws Exception {
         TestBean pinto = new TestBean();
         pinto.setId(42L);
         pinto.setSomething("whatever");
@@ -173,23 +139,30 @@ public class EntityEditorPresenterTest {
         TestBean pinto = new TestBean();
         pinto.setId(42L);
         pinto.setSomething("whatever");
-
-        when(repository.findOne(42L)).thenReturn(pinto);
-
-        presenter.edit(pinto);
+        ReflectionTestUtils.setField(presenter, "entity", pinto);
 
         when(testView.getFieldValue(String.class, "something")).thenReturn("whatever");
+        when(testView.getFieldValue(String.class, "passwordHash")).thenReturn("password");
 
         presenter.save();
 
         assertEquals(pinto.getSomething(), "whatever");
     }
 
+    public void confirmsDelete() {
+        TestBean pinto = new TestBean();
+        ReflectionTestUtils.setField(presenter, "entity", pinto);
+
+        presenter.deleteClicked();
+
+        verify(testView).confirmDelete(pinto);
+    }
+
     public void deletesEntity() {
         TestBean pinto = new TestBean();
         ReflectionTestUtils.setField(presenter, "entity", pinto);
 
-        presenter.delete();
+        presenter.deleteConfirmed();
 
         verify(repository).delete(pinto);
     }

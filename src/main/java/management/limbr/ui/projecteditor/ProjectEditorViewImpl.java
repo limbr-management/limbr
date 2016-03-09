@@ -22,6 +22,7 @@ package management.limbr.ui.projecteditor;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import management.limbr.data.model.Project;
+import management.limbr.data.model.util.EntityUtil;
 import management.limbr.ui.entity.EntityEditorView;
 import management.limbr.ui.entity.EntityEditorViewImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import java.util.Collection;
 @UIScope
 public class ProjectEditorViewImpl extends EntityEditorViewImpl<Project> {
     @Autowired
-    public ProjectEditorViewImpl(Collection<EntityEditorView.Listener<Project>> listeners, I18N messages) {
-        super(Project.class, listeners, messages);
+    public ProjectEditorViewImpl(Collection<EntityEditorView.Listener<Project>> listeners, I18N messages, EntityUtil entityUtil) {
+        super(Project.class, listeners, messages, entityUtil);
     }
 }

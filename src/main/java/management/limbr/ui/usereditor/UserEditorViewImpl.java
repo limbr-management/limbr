@@ -22,6 +22,7 @@ package management.limbr.ui.usereditor;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import management.limbr.data.model.User;
+import management.limbr.data.model.util.EntityUtil;
 import management.limbr.ui.PrivilegeLevels;
 import management.limbr.ui.RequiresPrivilege;
 import management.limbr.ui.entity.EntityEditorView;
@@ -40,7 +41,7 @@ import java.util.Collection;
 @UIScope
 public class UserEditorViewImpl extends EntityEditorViewImpl<User> {
     @Autowired
-    public UserEditorViewImpl(Collection<EntityEditorView.Listener<User>> listeners, I18N messages) {
-        super(User.class, listeners, messages);
+    public UserEditorViewImpl(Collection<EntityEditorView.Listener<User>> listeners, I18N messages, EntityUtil entityUtil) {
+        super(User.class, listeners, messages, entityUtil);
     }
 }
