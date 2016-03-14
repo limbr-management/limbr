@@ -19,7 +19,6 @@
 
 package management.limbr.ui.users;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.UI;
 import management.limbr.data.UserRepository;
@@ -73,11 +72,10 @@ public class UsersPresenterTest {
         assertEquals(result.getIdByIndex(0), mockUser);
     }
 
-    public void showsEditorWhenUserDoubleClicked() {
+    public void showsEditorWhenUserEditClicked() {
         User mockUser = mock(User.class);
-        BeanItem<User> item = new BeanItem<>(mockUser);
 
-        presenter.itemDoubleClicked(item);
+        presenter.editItemClicked(mockUser);
 
         verify(userEditorPresenter).edit(mockUser);
     }

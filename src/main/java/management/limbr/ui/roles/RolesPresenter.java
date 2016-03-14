@@ -19,8 +19,6 @@
 
 package management.limbr.ui.roles;
 
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.RoleRepository;
 import management.limbr.data.model.Role;
@@ -67,12 +65,11 @@ public class RolesPresenter implements ProjectsView.Listener<Role>, Serializable
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void itemDoubleClicked(Item project) {
-        if (project == null || !(project instanceof BeanItem)) {
+    public void editItemClicked(Role role) {
+        if (role == null) {
             editor.hide();
         } else {
-            editor.edit(((BeanItem<Role>)project).getBean());
+            editor.edit(role);
         }
     }
 

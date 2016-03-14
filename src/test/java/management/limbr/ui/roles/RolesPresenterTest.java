@@ -19,7 +19,6 @@
 
 package management.limbr.ui.roles;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.UI;
 import management.limbr.data.RoleRepository;
@@ -70,16 +69,16 @@ public class RolesPresenterTest {
         assertEquals(result.getIdByIndex(0), mockRole);
     }
 
-    public void showsEditorWhenDoubleClicked() {
-        BeanItem<Role> item = new BeanItem<>(mock(Role.class));
+    public void showsEditorWhenEditButtonClicked() {
+        Role role = mock(Role.class);
 
-        presenter.itemDoubleClicked(item);
+        presenter.editItemClicked(role);
 
-        verify(editor).edit(item.getBean());
+        verify(editor).edit(role);
     }
 
     public void hidesEditorWhenNothingClicked() {
-        presenter.itemDoubleClicked(null);
+        presenter.editItemClicked(null);
 
         verify(editor).hide();
     }

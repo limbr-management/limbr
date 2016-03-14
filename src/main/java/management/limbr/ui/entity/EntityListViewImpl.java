@@ -19,10 +19,15 @@
 
 package management.limbr.ui.entity;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
+import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import management.limbr.data.model.BaseEntity;
 import management.limbr.data.model.ListColumn;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -33,6 +38,8 @@ import javax.annotation.PostConstruct;
 import java.util.Collection;
 
 public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalLayout implements View, EntityListView {
+    public static final String EDIT_PROPERTY_ID = "_edit_";
+
     private transient Collection<EntityListView.Listener<T>> listeners;
     private transient I18N messages;
     private Grid grid;
@@ -46,8 +53,10 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
     }
 
     @PostConstruct
+    @SuppressWarnings("unchecked")
     public void init() {
         grid = new Grid();
+        grid.setEditorEnabled(true);
         TextField filter = new TextField();
         filter.setInputPrompt(messages.get("filterLabel"));
         filter.addTextChangeListener(event -> listEntities(event.getText()));
@@ -64,11 +73,11 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
             }
         }
 
-        grid.addItemClickListener(event -> {
-            if (event.isDoubleClick()) {
-                listeners.forEach(listener -> listener.itemDoubleClicked(event.getItem()));
-            }
-        });
+        Grid.Column editColumn = grid.addColumn(EDIT_PROPERTY_ID);
+        editColumn.setHeaderCaption("");
+        editColumn.setRenderer(new ButtonRenderer(event ->
+                listeners.forEach(listener ->
+                        listener.editItemClicked((T)event.getItemId()))));
 
         addNewButton.addClickListener(event -> listeners.forEach(EntityListView.Listener::addNewClicked));
 
@@ -91,7 +100,23 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
     }
 
     private void listEntities(String filter) {
-        listeners.forEach(listener -> grid.setContainerDataSource(listener.listEntities(filter)));
+        listeners.forEach(listener -> {
+            BeanItemContainer<T> items = listener.listEntities(filter);
+            GeneratedPropertyContainer gpc = new GeneratedPropertyContainer(items);
+            gpc.addGeneratedProperty(EDIT_PROPERTY_ID, new PropertyValueGenerator<String>() {
+                @Override
+                public String getValue(Item item, Object itemId, Object propertyId) {
+                    return messages.get("editButtonLabel");
+                }
+
+                @Override
+                public Class<String> getType() {
+                    return String.class;
+                }
+            });
+
+            grid.setContainerDataSource(gpc);
+        });
     }
 
     @Override

@@ -19,8 +19,6 @@
 
 package management.limbr.ui.projects;
 
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import management.limbr.data.ProjectRepository;
 import management.limbr.data.model.Project;
@@ -66,12 +64,11 @@ public class ProjectsPresenter implements ProjectsView.Listener<Project>, Serial
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void itemDoubleClicked(Item project) {
-        if (project == null || !(project instanceof BeanItem)) {
+    public void editItemClicked(Project project) {
+        if (project == null) {
             editor.hide();
         } else {
-            editor.edit(((BeanItem<Project>)project).getBean());
+            editor.edit(project);
         }
     }
 

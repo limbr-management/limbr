@@ -19,7 +19,6 @@
 
 package management.limbr.ui.projects;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.UI;
 import management.limbr.data.ProjectRepository;
@@ -71,15 +70,15 @@ public class ProjectsPresenterTest {
     }
 
     public void showsEditorWhenDoubleClicked() {
-        BeanItem<Project> item = new BeanItem<>(mock(Project.class));
+        Project project = mock(Project.class);
 
-        presenter.itemDoubleClicked(item);
+        presenter.editItemClicked(project);
 
-        verify(editor).edit(item.getBean());
+        verify(editor).edit(project);
     }
 
     public void hidesEditorWhenNothingClicked() {
-        presenter.itemDoubleClicked(null);
+        presenter.editItemClicked(null);
 
         verify(editor).hide();
     }
