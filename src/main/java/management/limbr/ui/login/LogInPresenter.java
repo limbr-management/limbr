@@ -23,10 +23,12 @@ import management.limbr.ui.ClientState;
 import management.limbr.ui.Presenter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Presenter
-public class LogInPresenter implements LogInView.LogInViewListener {
+import java.io.Serializable;
 
-    private LogInView view;
+@Presenter
+public class LogInPresenter implements LogInView.LogInViewListener, Serializable {
+
+    private transient LogInView view;
 
     private ClientState clientState;
 
