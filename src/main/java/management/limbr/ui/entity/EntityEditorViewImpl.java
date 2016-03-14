@@ -56,7 +56,8 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
 
     @PostConstruct
     public void init() {
-        VerticalLayout content = new VerticalLayout();
+        FormLayout content = new FormLayout();
+        content.setWidthUndefined();
 
         for (java.lang.reflect.Field field : entityClass.getDeclaredFields()) {
             if ("id".equals(field.getName())) {
