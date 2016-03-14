@@ -85,11 +85,16 @@ public abstract class EntityEditorViewImpl<T extends BaseEntity> extends Window 
         cancel.addClickListener(event -> listeners.forEach(EntityEditorView.Listener::cancel));
     }
 
-    private Field<String> getUIField(java.lang.reflect.Field field) {
+    private Field<?> getUIField(java.lang.reflect.Field field) {
         String label = messages.get(field.getName() + "FieldLabel");
         Password passwordAnnotation = field.getAnnotation(Password.class);
         if (passwordAnnotation != null) {
             return new PasswordField(label);
+        } else if (field.getType().isEnum()) {
+            ComboBox comboBox = new ComboBox(label);
+            comboBox.setTextInputAllowed(false);
+            comboBox.addItems(field.getType().getEnumConstants());
+            return comboBox;
         }
         return new TextField(label);
     }
