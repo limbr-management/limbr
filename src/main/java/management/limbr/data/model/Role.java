@@ -30,8 +30,10 @@ public class Role extends BaseEntity {
     private Long id;
 
     @DisplayName
+    @ListColumn
     private String name;
 
+    @ListColumn
     @Enumerated(EnumType.STRING)
     private RoleTypes type;
 

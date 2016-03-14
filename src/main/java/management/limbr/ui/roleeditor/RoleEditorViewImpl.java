@@ -17,13 +17,24 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.data;
+package management.limbr.ui.roleeditor;
 
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import management.limbr.data.model.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
+import management.limbr.data.model.util.EntityUtil;
+import management.limbr.ui.entity.EntityEditorView;
+import management.limbr.ui.entity.EntityEditorViewImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.i18n.I18N;
 
-import java.util.List;
+import java.util.Collection;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    List<Role> findByNameStartsWithIgnoreCase(String name);
+@SpringComponent
+@UIScope
+public class RoleEditorViewImpl extends EntityEditorViewImpl<Role> {
+    @Autowired
+    public RoleEditorViewImpl(Collection<EntityEditorView.Listener<Role>> listeners, I18N messages, EntityUtil entityUtil) {
+        super(Role.class, listeners, messages, entityUtil);
+    }
 }

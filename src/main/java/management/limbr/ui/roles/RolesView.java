@@ -17,13 +17,9 @@
  * along with Limbr.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package management.limbr.data;
+package management.limbr.ui.roles;
 
-import management.limbr.data.model.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
+import management.limbr.ui.entity.EntityListView;
 
-import java.util.List;
-
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    List<Role> findByNameStartsWithIgnoreCase(String name);
+public interface RolesView extends EntityListView {
 }
