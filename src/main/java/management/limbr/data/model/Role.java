@@ -37,6 +37,15 @@ public class Role extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RoleTypes type;
 
+    public Role() {
+        // default constructor
+    }
+
+    public Role(String name, RoleTypes type) {
+        this.name = name;
+        this.type = type;
+    }
+
     @Override
     public Long getId() {
         return id;

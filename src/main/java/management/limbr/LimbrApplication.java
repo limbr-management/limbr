@@ -19,7 +19,10 @@
 
 package management.limbr;
 
+import management.limbr.data.RoleRepository;
 import management.limbr.data.UserRepository;
+import management.limbr.data.model.Role;
+import management.limbr.data.model.RoleTypes;
 import management.limbr.data.model.User;
 import management.limbr.data.model.util.EntityUtil;
 import org.slf4j.Logger;
@@ -50,11 +53,21 @@ public class LimbrApplication {
     }
 
     @Bean
-    public CommandLineRunner loadData(UserRepository repository) {
+    public CommandLineRunner loadDefaultUser(UserRepository repository) {
         return args -> {
             EntityUtil entityUtil = new EntityUtil();
             repository.save(new User("admin", "Admin", entityUtil.generatePasswordHash("admin", "admin"), "admin@limbr.management"));
-            repository.save(new User("bob", "Bob Builder", entityUtil.generatePasswordHash("bob", "bob"), "bob@limbr.management"));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner loadDefaultRoles(RoleRepository repository) {
+        return args -> {
+            repository.save(new Role("Administrator", RoleTypes.ADMIN));
+            repository.save(new Role("Manager", RoleTypes.MANAGER));
+            repository.save(new Role("Lead", RoleTypes.LEAD));
+            repository.save(new Role("Developer", RoleTypes.DEVELOPER));
+            repository.save(new Role("Viewer", RoleTypes.VIEWER));
         };
     }
 
