@@ -57,6 +57,7 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
     public void init() {
         grid = new Grid();
         grid.setEditorEnabled(true);
+        grid.setSizeFull();
         TextField filter = new TextField();
         filter.setInputPrompt(messages.get("filterLabel"));
         filter.addTextChangeListener(event -> listEntities(event.getText()));
@@ -74,6 +75,7 @@ public abstract class EntityListViewImpl<T extends BaseEntity> extends VerticalL
         }
 
         Grid.Column editColumn = grid.addColumn(EDIT_PROPERTY_ID);
+        editColumn.setMaximumWidth(50.0);
         editColumn.setHeaderCaption("");
         editColumn.setRenderer(new ButtonRenderer(event ->
                 listeners.forEach(listener ->
